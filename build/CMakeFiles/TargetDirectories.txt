@@ -1,0 +1,9 @@
+/home/shatwik/Project/clfft/build/CMakeFiles/clapfft.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_c2c.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/edit_cache.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/rebuild_cache.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/list_install_components.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/install.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/install/local.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/install/strip.dir

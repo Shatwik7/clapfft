@@ -1,0 +1,2 @@
+/usr/bin/ar qc libclapfft.a CMakeFiles/clapfft.dir/src/clapfft_api.cpp.o
+/usr/bin/ranlib libclapfft.a
