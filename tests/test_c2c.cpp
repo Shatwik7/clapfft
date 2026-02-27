@@ -1,364 +1,423 @@
 #include <clapfft/clapfft_api.hpp>
-#include <iostream>
-#include <vector>
-#include <complex>
 #include <fftw3.h>
 #include <cassert>
+#include <complex>
+#include <cstddef>
+#include <iostream>
+#include <type_traits>
+#include <vector>
+
+namespace {
 
 template <typename T>
-void print_vector_1d(const std::vector<std::complex<T>> &vec)
-{
-    for (const auto &c : vec)
-    {
-        std::cout << c << " ";
-    }
-    std::cout << std::endl;
-}
-void print_vector_1d(const std::vector<float> &vec){
-    for (const auto &c : vec)
-    {
-        std::cout << c << " ";
-    }
-    std::cout << std::endl;
-}
+T tolerance();
 
-template< typename T>
-void print_vector_2d(const std::vector<std::vector<std::complex<T>>>& vec)
+template <>
+float tolerance<float>() { return 1e-4f; }
+
+template <>
+double tolerance<double>() { return 1e-10; }
+
+template <>
+long double tolerance<long double>() { return 1e-10L; }
+
+template <typename T>
+std::vector<std::complex<T>> make_complex_signal_1d(int n)
 {
-    for (const auto& row : vec)
-    {
-        for (const auto& c : row)
-        {
-            std::cout << c << " ";
-        }
-        std::cout << std::endl;
+    std::vector<std::complex<T>> signal(static_cast<std::size_t>(n));
+    for (int i = 0; i < n; ++i) {
+        T real = static_cast<T>(i) * static_cast<T>(0.25) + static_cast<T>(1.0);
+        T imag = static_cast<T>((i % 5) - 2) * static_cast<T>(0.5);
+        signal[static_cast<std::size_t>(i)] = std::complex<T>(real, imag);
     }
+    return signal;
 }
 
-
-void test1()
+template <typename T>
+std::vector<T> make_real_signal_1d(int n)
 {
-    int n = 8;
-    std::vector<std::complex<float>> input(n);
-    for (int i = 0; i < n; ++i)
-    {
-        input[i] = std::complex<float>(i, 0);
+    std::vector<T> signal(static_cast<std::size_t>(n));
+    for (int i = 0; i < n; ++i) {
+        signal[static_cast<std::size_t>(i)] = static_cast<T>((i * 3) % 11) - static_cast<T>(2.0);
     }
-
-    std::cout << "Input:" << std::endl;
-    print_vector_1d(input);
-
-    std::vector<std::complex<float>> transformed;
-    clapfft::FFT::fftw_c2c_1d(input, transformed, FFTW_FORWARD);
-
-    std::cout << "Transformed (Forward):" << std::endl;
-    print_vector_1d(transformed);
-
-    std::vector<std::complex<float>> restored;
-    clapfft::FFT::fftw_c2c_1d(transformed, restored, FFTW_BACKWARD);
-
-    // FFTW's backward transform is unnormalized, so we need to divide by N.
-    for (auto &c : restored)
-    {
-        c /= n;
-    }
-
-    std::cout << "Restored (Backward + normalization):" << std::endl;
-    print_vector_1d(restored);
-
-    // Check if the restored vector is close to the original input
-    float epsilon = 1e-5;
-    for (int i = 0; i < n; ++i)
-    {
-        assert(std::abs(input[i].real() - restored[i].real()) < epsilon);
-        assert(std::abs(input[i].imag() - restored[i].imag()) < epsilon);
-    }
-
-    std::cout << "Test passed!" << std::endl;
+    return signal;
 }
 
-void test_1d_float()
+template <typename T>
+void assert_complex_close(const std::vector<std::complex<T>>& expected,
+                          const std::vector<std::complex<T>>& actual,
+                          T eps)
 {
-
-    std::cout<<"]\n \n \n TEST : 1D float";
-    int n = 8;
-    std::vector<std::complex<float>> input(n);
-    for (int i = 0; i < n; ++i)
-    {
-        input[i] = std::complex<float>(i, 0);
+    assert(expected.size() == actual.size());
+    for (std::size_t i = 0; i < expected.size(); ++i) {
+        assert(std::abs(expected[i].real() - actual[i].real()) <= eps);
+        assert(std::abs(expected[i].imag() - actual[i].imag()) <= eps);
     }
-
-    std::cout << "Input:" << std::endl;
-    print_vector_1d(input);
-
-    std::vector<std::complex<float>> transformed;
-    clapfft::FFT::fftw_c2c_1d(input, transformed, FFTW_FORWARD);
-
-    std::cout<<"Transformation"<<std::endl;
-    print_vector_1d(transformed);
-
-    std::vector<std::complex<float>> restored;
-    clapfft::FFT::fftw_c2c_1d(transformed, restored, FFTW_BACKWARD);
-
-    std::cout << "Restored (Backward):" << std::endl;
-    print_vector_1d(restored);
-
-    std::cout << "Test passed! \n \n \n" << std::endl;
 }
 
-void test_1d_double()
+template <typename T>
+void assert_real_close(const std::vector<T>& expected,
+                       const std::vector<T>& actual,
+                       T eps)
 {
-    int n = 8;
-    std::vector<std::complex<double>> input(n);
-    for (int i = 0; i < n; ++i)
-    {
-        input[i] = std::complex<double>(i, 0);
+    assert(expected.size() == actual.size());
+    for (std::size_t i = 0; i < expected.size(); ++i) {
+        assert(std::abs(expected[i] - actual[i]) <= eps);
     }
-
-    std::cout << "Input:" << std::endl;
-    print_vector_1d(input);
-
-    std::vector<std::complex<double>> transformed;
-    clapfft::FFT::fftw_c2c_1d(input, transformed, FFTW_FORWARD);
-
-    std::vector<std::complex<double>> restored;
-    clapfft::FFT::fftw_c2c_1d(transformed, restored, FFTW_BACKWARD);
-    std::cout << "Test passed!" << std::endl;
 }
 
-void test_1d_long_double()
+template <typename T>
+void test_c2c_roundtrip_1d()
 {
-    int n = 8;
-    std::vector<std::complex<long double>> input(n);
-    for (int i = 0; i < n; ++i)
-    {
-        input[i] = std::complex<long double>(i, 0);
-    }
+    const int n = 16;
+    const T eps = tolerance<T>();
+    const std::vector<std::complex<T>> input = make_complex_signal_1d<T>(n);
 
-    std::cout << "Input:" << std::endl;
-    print_vector_1d(input);
+    for (int run = 0; run < 5; ++run) {
+        std::vector<std::complex<T>> spectrum;
+        std::vector<std::complex<T>> recovered;
 
-    std::vector<std::complex<long double>> transformed;
-    clapfft::FFT::fftw_c2c_1d(input, transformed, FFTW_FORWARD);
+        clapfft::FFT::c2c_1d(input, spectrum, FFTW_FORWARD);
+        clapfft::FFT::c2c_1d(spectrum, recovered, FFTW_BACKWARD);
 
-    std::vector<std::complex<long double>> restored;
-    clapfft::FFT::fftw_c2c_1d(transformed, restored, FFTW_BACKWARD);
-
-    std::cout << "Test passed!" << std::endl;
-}
-
-void test_2d_float()
-{
-    std::cout<<"TEST : 2D float";
-    int n0 = 3;
-    int n1 = 4;
-    std::vector<std::vector<std::complex<float>>> input(n0, std::vector<std::complex<float>>(n1));
-    for (int i = 0; i < n0; ++i)
-    {
-        for (int j = 0; j < n1; ++j)
-        {
-            input[i][j] = std::complex<float>(i * n1 + j, 0);
-        }
-    }
-    std::cout << "Input:" << std::endl;
-    print_vector_2d(input);
-
-    std::vector<std::vector<std::complex<float>>> transformed;
-    clapfft::FFT::fftw_c2c_2d(input, transformed, FFTW_FORWARD);
-
-    std::cout<< "Transformed (Forward):" << std::endl;
-    print_vector_2d(transformed);
-
-
-    std::vector<std::vector<std::complex<float>>> restored;
-    clapfft::FFT::fftw_c2c_2d(transformed, restored, FFTW_BACKWARD);
-
-    std::cout<< "Restored (Backward):" << std::endl;
-    print_vector_2d(restored);
-
-    std::cout << "Test passed!" << std::endl;
-
-}
-
-void test_2d_double()
-{
-    int n0 = 3;
-    int n1 = 4;
-    std::vector<std::vector<std::complex<double>>> input(n0, std::vector<std::complex<double>>(n1));
-    for (int i = 0; i < n0; ++i)
-    {
-        for (int j = 0; j < n1; ++j)
-        {
-            input[i][j] = std::complex<double>(i * n1 + j, 0);
-        }
-    }
-    std::cout << "Input:" << std::endl;
-    print_vector_2d(input);
-
-    std::vector<std::vector<std::complex<double>>> transformed;
-    clapfft::FFT::fftw_c2c_2d(input, transformed, FFTW_FORWARD);
-
-    print_vector_2d(transformed);
-
-    clapfft::FFT::fftw_c2c_2d(transformed, input, FFTW_BACKWARD);
-
-    print_vector_2d(input);
-}
-
-void c2r_test()
-{
-    std::cout<<" \n \n TEST : c2r";
-    int n = 8;
-    std::vector<std::complex<float>> input(n);
-    for (int i = 0; i < n; ++i)
-    {
-        input[i] = std::complex<float>(i, 0);
-    }
-
-    std::cout << "Input:" << std::endl;
-    print_vector_1d(input);
-
-    std::vector<float> transformed;
-    clapfft::FFT::fftw_c2r_1d(input, transformed);
-
-    std::cout << "Transformed (Forward):" << std::endl;
-    print_vector_1d(transformed);
-    
-    std::cout<< "Test passed!" << std::endl;
-}
-void c2r_test();
-void r2c_c2r_test();
-
-void r2c_c2r_test()
-{
-    // 1D test
-    {
-        int n = 8;
-        std::vector<float> input(n);
-        for (int i = 0; i < n; ++i)
-        {
-            input[i] = i;
+        for (std::size_t i = 0; i < recovered.size(); ++i) {
+            recovered[i] /= static_cast<T>(n);
         }
 
-        std::vector<std::complex<float>> complex_output;
-        clapfft::FFT::fftw_r2c_1d(input, complex_output);
+        assert_complex_close(input, recovered, eps);
+    }
+}
 
-        std::vector<float> real_output;
-        clapfft::FFT::fftw_c2r_1d(complex_output, real_output);
+template <typename T>
+void test_c2c_roundtrip_2d()
+{
+    const int n0 = 5;
+    const int n1 = 6;
+    const T eps = tolerance<T>();
 
-        // Normalization
-        for (auto &val : real_output)
-        {
-            val /= n;
+    std::vector<std::vector<std::complex<T>>> input(
+        static_cast<std::size_t>(n0),
+        std::vector<std::complex<T>>(static_cast<std::size_t>(n1)));
+
+    for (int i = 0; i < n0; ++i) {
+        for (int j = 0; j < n1; ++j) {
+            T real = static_cast<T>(i * n1 + j) * static_cast<T>(0.125);
+            T imag = static_cast<T>((i - j) % 4) * static_cast<T>(0.33);
+            input[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)] = std::complex<T>(real, imag);
         }
-
-        float epsilon = 1e-5;
-        for (int i = 0; i < n; ++i)
-        {
-            assert(std::abs(input[i] - real_output[i]) < epsilon);
-        }
-        std::cout << "1D r2c/c2r test passed!" << std::endl;
     }
 
-    // 2D test
-    {
-        int n0 = 3;
-        int n1 = 4;
-        std::vector<std::vector<float>> input(n0, std::vector<float>(n1));
-        for (int i = 0; i < n0; ++i)
-        {
-            for (int j = 0; j < n1; ++j)
-            {
-                input[i][j] = i * n1 + j;
+    for (int run = 0; run < 4; ++run) {
+        std::vector<std::vector<std::complex<T>>> spectrum;
+        std::vector<std::vector<std::complex<T>>> recovered;
+
+        clapfft::FFT::c2c_2d(input, spectrum, FFTW_FORWARD);
+        clapfft::FFT::c2c_2d(spectrum, recovered, FFTW_BACKWARD);
+
+        assert(recovered.size() == static_cast<std::size_t>(n0));
+        for (int i = 0; i < n0; ++i) {
+            assert(recovered[static_cast<std::size_t>(i)].size() == static_cast<std::size_t>(n1));
+            for (int j = 0; j < n1; ++j) {
+                recovered[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)] /= static_cast<T>(n0 * n1);
+            }
+            assert_complex_close(input[static_cast<std::size_t>(i)], recovered[static_cast<std::size_t>(i)], eps);
+        }
+    }
+}
+
+template <typename T>
+void test_c2c_roundtrip_3d()
+{
+    const int n0 = 3;
+    const int n1 = 4;
+    const int n2 = 5;
+    const T eps = tolerance<T>();
+
+    std::vector<std::vector<std::vector<std::complex<T>>>> input(
+        static_cast<std::size_t>(n0),
+        std::vector<std::vector<std::complex<T>>>(
+            static_cast<std::size_t>(n1),
+            std::vector<std::complex<T>>(static_cast<std::size_t>(n2))));
+
+    for (int i = 0; i < n0; ++i) {
+        for (int j = 0; j < n1; ++j) {
+            for (int k = 0; k < n2; ++k) {
+                T real = static_cast<T>(i * n1 * n2 + j * n2 + k) * static_cast<T>(0.05);
+                T imag = static_cast<T>((i + j - k) % 7) * static_cast<T>(0.2);
+                input[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)][static_cast<std::size_t>(k)] =
+                    std::complex<T>(real, imag);
             }
         }
-
-        std::vector<std::vector<std::complex<float>>> complex_output;
-        clapfft::FFT::fftw_r2c_2d(input, complex_output);
-
-        std::vector<std::vector<float>> real_output;
-        clapfft::FFT::fftw_c2r_2d(complex_output, real_output);
-
-        // Normalization
-        for (int i = 0; i < n0; ++i)
-        {
-            for (int j = 0; j < n1; ++j)
-            {
-                real_output[i][j] /= (n0 * n1);
-            }
-        }
-
-        float epsilon = 1e-5;
-        for (int i = 0; i < n0; ++i)
-        {
-            for (int j = 0; j < n1; ++j)
-            {
-                assert(std::abs(input[i][j] - real_output[i][j]) < epsilon);
-            }
-        }
-        std::cout << "2D r2c/c2r test passed!" << std::endl;
     }
 
-    // 3D test
-    {
-        int n0 = 2;
-        int n1 = 3;
-        int n2 = 4;
-        std::vector<std::vector<std::vector<float>>> input(n0, std::vector<std::vector<float>>(n1, std::vector<float>(n2)));
-        for (int i = 0; i < n0; ++i)
-        {
-            for (int j = 0; j < n1; ++j)
-            {
-                for(int k = 0; k < n2; ++k)
-                {
-                    input[i][j][k] = i * n1 * n2 + j * n2 + k;
+    for (int run = 0; run < 3; ++run) {
+        std::vector<std::vector<std::vector<std::complex<T>>>> spectrum;
+        std::vector<std::vector<std::vector<std::complex<T>>>> recovered;
+
+        clapfft::FFT::c2c_3d(input, spectrum, FFTW_FORWARD);
+        clapfft::FFT::c2c_3d(spectrum, recovered, FFTW_BACKWARD);
+
+        assert(recovered.size() == static_cast<std::size_t>(n0));
+        for (int i = 0; i < n0; ++i) {
+            assert(recovered[static_cast<std::size_t>(i)].size() == static_cast<std::size_t>(n1));
+            for (int j = 0; j < n1; ++j) {
+                assert(recovered[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)].size() == static_cast<std::size_t>(n2));
+                for (int k = 0; k < n2; ++k) {
+                    recovered[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)][static_cast<std::size_t>(k)]
+                        /= static_cast<T>(n0 * n1 * n2);
                 }
+                assert_complex_close(input[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)],
+                                     recovered[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)],
+                                     eps);
             }
         }
-
-        std::vector<std::vector<std::vector<std::complex<float>>>> complex_output;
-        clapfft::FFT::fftw_r2c_3d(input, complex_output);
-
-        std::vector<std::vector<std::vector<float>>> real_output;
-        clapfft::FFT::fftw_c2r_3d(complex_output, real_output);
-
-        // Normalization
-        for (int i = 0; i < n0; ++i)
-        {
-            for (int j = 0; j < n1; ++j)
-            {
-                for(int k = 0; k < n2; ++k)
-                {
-                    real_output[i][j][k] /= (n0 * n1 * n2);
-                }
-            }
-        }
-
-        float epsilon = 1e-5;
-        for (int i = 0; i < n0; ++i)
-        {
-            for (int j = 0; j < n1; ++j)
-            {
-                for(int k = 0; k < n2; ++k)
-                {
-                    assert(std::abs(input[i][j][k] - real_output[i][j][k]) < epsilon);
-                }
-            }
-        }
-        std::cout << "3D r2c/c2r test passed!" << std::endl;
     }
 }
+
+template <typename T>
+void test_r2c_c2r_roundtrip_1d()
+{
+    const int n = 18;
+    const T eps = tolerance<T>();
+    const std::vector<T> input = make_real_signal_1d<T>(n);
+
+    for (int run = 0; run < 5; ++run) {
+        std::vector<std::complex<T>> spectrum;
+        std::vector<T> recovered;
+
+        clapfft::FFT::r2c_1d(input, spectrum);
+        assert(spectrum.size() == static_cast<std::size_t>(n / 2 + 1));
+
+        clapfft::FFT::c2r_1d(spectrum, recovered);
+        assert(recovered.size() == static_cast<std::size_t>(n));
+
+        for (std::size_t i = 0; i < recovered.size(); ++i) {
+            recovered[i] /= static_cast<T>(n);
+        }
+
+        assert_real_close(input, recovered, eps);
+    }
+}
+
+template <typename T>
+void test_r2c_c2r_roundtrip_2d()
+{
+    const int n0 = 4;
+    const int n1 = 8;
+    const T eps = tolerance<T>();
+
+    std::vector<std::vector<T>> input(
+        static_cast<std::size_t>(n0),
+        std::vector<T>(static_cast<std::size_t>(n1)));
+
+    for (int i = 0; i < n0; ++i) {
+        for (int j = 0; j < n1; ++j) {
+            input[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)] =
+                static_cast<T>((i * 5 + j * 7) % 13) - static_cast<T>(4);
+        }
+    }
+
+    for (int run = 0; run < 4; ++run) {
+        std::vector<std::vector<std::complex<T>>> spectrum;
+        std::vector<std::vector<T>> recovered;
+
+        clapfft::FFT::r2c_2d(input, spectrum);
+        assert(spectrum.size() == static_cast<std::size_t>(n0));
+        for (int i = 0; i < n0; ++i) {
+            assert(spectrum[static_cast<std::size_t>(i)].size() == static_cast<std::size_t>(n1 / 2 + 1));
+        }
+
+        clapfft::FFT::c2r_2d(spectrum, recovered);
+        assert(recovered.size() == static_cast<std::size_t>(n0));
+
+        for (int i = 0; i < n0; ++i) {
+            assert(recovered[static_cast<std::size_t>(i)].size() == static_cast<std::size_t>(n1));
+            for (int j = 0; j < n1; ++j) {
+                recovered[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)] /= static_cast<T>(n0 * n1);
+            }
+            assert_real_close(input[static_cast<std::size_t>(i)], recovered[static_cast<std::size_t>(i)], eps);
+        }
+    }
+}
+
+template <typename T>
+void test_r2c_c2r_roundtrip_3d()
+{
+    const int n0 = 3;
+    const int n1 = 4;
+    const int n2 = 6;
+    const T eps = tolerance<T>();
+
+    std::vector<std::vector<std::vector<T>>> input(
+        static_cast<std::size_t>(n0),
+        std::vector<std::vector<T>>(
+            static_cast<std::size_t>(n1),
+            std::vector<T>(static_cast<std::size_t>(n2))));
+
+    for (int i = 0; i < n0; ++i) {
+        for (int j = 0; j < n1; ++j) {
+            for (int k = 0; k < n2; ++k) {
+                input[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)][static_cast<std::size_t>(k)] =
+                    static_cast<T>((i * 11 + j * 3 + k * 2) % 17) - static_cast<T>(8);
+            }
+        }
+    }
+
+    for (int run = 0; run < 3; ++run) {
+        std::vector<std::vector<std::vector<std::complex<T>>>> spectrum;
+        std::vector<std::vector<std::vector<T>>> recovered;
+
+        clapfft::FFT::r2c_3d(input, spectrum);
+        assert(spectrum.size() == static_cast<std::size_t>(n0));
+        for (int i = 0; i < n0; ++i) {
+            assert(spectrum[static_cast<std::size_t>(i)].size() == static_cast<std::size_t>(n1));
+            for (int j = 0; j < n1; ++j) {
+                assert(spectrum[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)].size() == static_cast<std::size_t>(n2 / 2 + 1));
+            }
+        }
+
+        clapfft::FFT::c2r_3d(spectrum, recovered);
+        assert(recovered.size() == static_cast<std::size_t>(n0));
+
+        for (int i = 0; i < n0; ++i) {
+            assert(recovered[static_cast<std::size_t>(i)].size() == static_cast<std::size_t>(n1));
+            for (int j = 0; j < n1; ++j) {
+                assert(recovered[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)].size() == static_cast<std::size_t>(n2));
+                for (int k = 0; k < n2; ++k) {
+                    recovered[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)][static_cast<std::size_t>(k)]
+                        /= static_cast<T>(n0 * n1 * n2);
+                }
+                assert_real_close(input[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)],
+                                  recovered[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)],
+                                  eps);
+            }
+        }
+    }
+}
+
+template <typename T>
+void test_r2r_roundtrip_1d()
+{
+    const int n = 16;
+    const T eps = tolerance<T>();
+    const std::vector<T> input = make_real_signal_1d<T>(n);
+
+    for (int run = 0; run < 5; ++run) {
+        std::vector<T> forward;
+        std::vector<T> recovered;
+
+        clapfft::FFT::r2r_1d(input, forward, FFTW_REDFT10);
+        clapfft::FFT::r2r_1d(forward, recovered, FFTW_REDFT01);
+
+        for (std::size_t i = 0; i < recovered.size(); ++i) {
+            recovered[i] /= static_cast<T>(2 * n);
+        }
+
+        assert_real_close(input, recovered, eps * static_cast<T>(4));
+    }
+}
+
+template <typename T>
+void test_r2r_roundtrip_2d()
+{
+    const int n0 = 4;
+    const int n1 = 6;
+    const T eps = tolerance<T>();
+
+    std::vector<std::vector<T>> input(
+        static_cast<std::size_t>(n0),
+        std::vector<T>(static_cast<std::size_t>(n1)));
+
+    for (int i = 0; i < n0; ++i) {
+        for (int j = 0; j < n1; ++j) {
+            input[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)] =
+                static_cast<T>((i * 7 + j * 4) % 19) - static_cast<T>(6);
+        }
+    }
+
+    for (int run = 0; run < 4; ++run) {
+        std::vector<std::vector<T>> forward;
+        std::vector<std::vector<T>> recovered;
+
+        clapfft::FFT::r2r_2d(input, forward, FFTW_REDFT10, FFTW_REDFT10);
+        clapfft::FFT::r2r_2d(forward, recovered, FFTW_REDFT01, FFTW_REDFT01);
+
+        for (int i = 0; i < n0; ++i) {
+            for (int j = 0; j < n1; ++j) {
+                recovered[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)]
+                    /= static_cast<T>((2 * n0) * (2 * n1));
+            }
+            assert_real_close(input[static_cast<std::size_t>(i)], recovered[static_cast<std::size_t>(i)], eps * static_cast<T>(8));
+        }
+    }
+}
+
+template <typename T>
+void test_r2r_roundtrip_3d()
+{
+    const int n0 = 3;
+    const int n1 = 4;
+    const int n2 = 6;
+    const T eps = tolerance<T>();
+
+    std::vector<std::vector<std::vector<T>>> input(
+        static_cast<std::size_t>(n0),
+        std::vector<std::vector<T>>(
+            static_cast<std::size_t>(n1),
+            std::vector<T>(static_cast<std::size_t>(n2))));
+
+    for (int i = 0; i < n0; ++i) {
+        for (int j = 0; j < n1; ++j) {
+            for (int k = 0; k < n2; ++k) {
+                input[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)][static_cast<std::size_t>(k)] =
+                    static_cast<T>((i * 3 + j * 5 + k * 7) % 23) - static_cast<T>(9);
+            }
+        }
+    }
+
+    for (int run = 0; run < 3; ++run) {
+        std::vector<std::vector<std::vector<T>>> forward;
+        std::vector<std::vector<std::vector<T>>> recovered;
+
+        clapfft::FFT::r2r_3d(input, forward, FFTW_REDFT10, FFTW_REDFT10, FFTW_REDFT10);
+        clapfft::FFT::r2r_3d(forward, recovered, FFTW_REDFT01, FFTW_REDFT01, FFTW_REDFT01);
+
+        const T scale = static_cast<T>((2 * n0) * (2 * n1) * (2 * n2));
+        for (int i = 0; i < n0; ++i) {
+            for (int j = 0; j < n1; ++j) {
+                for (int k = 0; k < n2; ++k) {
+                    recovered[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)][static_cast<std::size_t>(k)] /= scale;
+                }
+                assert_real_close(input[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)],
+                                  recovered[static_cast<std::size_t>(i)][static_cast<std::size_t>(j)],
+                                  eps * static_cast<T>(16));
+            }
+        }
+    }
+}
+
+template <typename T>
+void run_all_precision_tests()
+{
+    test_c2c_roundtrip_1d<T>();
+    test_c2c_roundtrip_2d<T>();
+    test_c2c_roundtrip_3d<T>();
+    test_r2c_c2r_roundtrip_1d<T>();
+    test_r2c_c2r_roundtrip_2d<T>();
+    test_r2c_c2r_roundtrip_3d<T>();
+    test_r2r_roundtrip_1d<T>();
+    test_r2r_roundtrip_2d<T>();
+    test_r2r_roundtrip_3d<T>();
+}
+
+} // namespace
 
 int main()
 {
-    test1();
-    test_1d_float();
-    test_1d_double();
-    test_1d_long_double();
-    test_2d_float();
-    test_2d_double();
+    run_all_precision_tests<float>();
+    run_all_precision_tests<double>();
+    run_all_precision_tests<long double>();
 
-    c2r_test();
-    r2c_c2r_test();
+    std::cout << "All clapfft tests passed." << std::endl;
     return 0;
 }
