@@ -1,2 +1,15 @@
-c2c_test 1 0.311377
+c2c_test 5 0.0329057
+real_transforms_test 2 0.076206
+c2c_1d_test 4 0.00145554
+c2c_2d_test 4 0.00814509
+c2c_3d_test 4 0.0144031
+r2c_1d_test 4 0.0051906
+r2c_2d_test 4 0.00603625
+r2c_3d_test 4 0.0124306
+c2r_1d_test 4 0.00576673
+c2r_2d_test 4 0.00678762
+c2r_3d_test 4 0.0120056
+r2r_1d_test 4 0.00201832
+r2r_2d_test 4 0.00409199
+r2r_3d_test 4 0.00745975
 ---

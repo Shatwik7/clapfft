@@ -35,17 +35,30 @@ target_link_libraries(clapfft PRIVATE ${FFTW3F_LIBRARIES} ${FFTW3D_LIBRARIES} ${
 # Enable testing with CTest
 enable_testing()
 
-# Add the test executable
-add_executable(test_c2c
-    tests/test_c2c.cpp
+# Add separate test executables per transform and dimension
+set(CLAPFFT_TEST_CASES
+    c2c_1d
+    c2c_2d
+    c2c_3d
+    r2c_1d
+    r2c_2d
+    r2c_3d
+    c2r_1d
+    c2r_2d
+    c2r_3d
+    r2r_1d
+    r2r_2d
+    r2r_3d
 )
 
-# Link the test executable with our library.
-# The test uses the float version, so it needs fftw3f.
-target_link_libraries(test_c2c PRIVATE clapfft)
-
-# Add a CTest test
-add_test(NAME c2c_test COMMAND test_c2c)
+foreach(case IN LISTS CLAPFFT_TEST_CASES)
+    set(target_name "test_${case}")
+    add_executable(${target_name}
+        tests/test_${case}.cpp
+    )
+    target_link_libraries(${target_name} PRIVATE clapfft)
+    add_test(NAME ${case}_test COMMAND ${target_name})
+endforeach()
 
 
 # --- Installation ---

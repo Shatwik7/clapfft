@@ -1,19 +1,195 @@
-Start testing: Feb 27 08:25 UTC
+Start testing: Feb 27 10:16 UTC
 ----------------------------------------------------------
-1/1 Testing: c2c_test
-1/1 Test: c2c_test
-Command: "/home/shatwik/Project/clfft/build/test_c2c"
+1/12 Testing: c2c_1d_test
+1/12 Test: c2c_1d_test
+Command: "/home/shatwik/Project/clfft/build/test_c2c_1d"
 Directory: /home/shatwik/Project/clfft/build
-"c2c_test" start time: Feb 27 08:25 UTC
+"c2c_1d_test" start time: Feb 27 10:16 UTC
 Output:
 ----------------------------------------------------------
-All clapfft tests passed.
+c2c_1d tests passed.
 <end of output>
-Test time =   0.31 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"c2c_test" end time: Feb 27 08:25 UTC
-"c2c_test" time elapsed: 00:00:00
+"c2c_1d_test" end time: Feb 27 10:16 UTC
+"c2c_1d_test" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Feb 27 08:25 UTC
+2/12 Testing: c2c_2d_test
+2/12 Test: c2c_2d_test
+Command: "/home/shatwik/Project/clfft/build/test_c2c_2d"
+Directory: /home/shatwik/Project/clfft/build
+"c2c_2d_test" start time: Feb 27 10:16 UTC
+Output:
+----------------------------------------------------------
+c2c_2d tests passed.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"c2c_2d_test" end time: Feb 27 10:16 UTC
+"c2c_2d_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/12 Testing: c2c_3d_test
+3/12 Test: c2c_3d_test
+Command: "/home/shatwik/Project/clfft/build/test_c2c_3d"
+Directory: /home/shatwik/Project/clfft/build
+"c2c_3d_test" start time: Feb 27 10:16 UTC
+Output:
+----------------------------------------------------------
+c2c_3d tests passed.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"c2c_3d_test" end time: Feb 27 10:16 UTC
+"c2c_3d_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/12 Testing: r2c_1d_test
+4/12 Test: r2c_1d_test
+Command: "/home/shatwik/Project/clfft/build/test_r2c_1d"
+Directory: /home/shatwik/Project/clfft/build
+"r2c_1d_test" start time: Feb 27 10:16 UTC
+Output:
+----------------------------------------------------------
+r2c_1d tests passed.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"r2c_1d_test" end time: Feb 27 10:16 UTC
+"r2c_1d_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/12 Testing: r2c_2d_test
+5/12 Test: r2c_2d_test
+Command: "/home/shatwik/Project/clfft/build/test_r2c_2d"
+Directory: /home/shatwik/Project/clfft/build
+"r2c_2d_test" start time: Feb 27 10:16 UTC
+Output:
+----------------------------------------------------------
+r2c_2d tests passed.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"r2c_2d_test" end time: Feb 27 10:16 UTC
+"r2c_2d_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/12 Testing: r2c_3d_test
+6/12 Test: r2c_3d_test
+Command: "/home/shatwik/Project/clfft/build/test_r2c_3d"
+Directory: /home/shatwik/Project/clfft/build
+"r2c_3d_test" start time: Feb 27 10:16 UTC
+Output:
+----------------------------------------------------------
+r2c_3d tests passed.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"r2c_3d_test" end time: Feb 27 10:16 UTC
+"r2c_3d_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/12 Testing: c2r_1d_test
+7/12 Test: c2r_1d_test
+Command: "/home/shatwik/Project/clfft/build/test_c2r_1d"
+Directory: /home/shatwik/Project/clfft/build
+"c2r_1d_test" start time: Feb 27 10:16 UTC
+Output:
+----------------------------------------------------------
+c2r_1d tests passed.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"c2r_1d_test" end time: Feb 27 10:16 UTC
+"c2r_1d_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/12 Testing: c2r_2d_test
+8/12 Test: c2r_2d_test
+Command: "/home/shatwik/Project/clfft/build/test_c2r_2d"
+Directory: /home/shatwik/Project/clfft/build
+"c2r_2d_test" start time: Feb 27 10:16 UTC
+Output:
+----------------------------------------------------------
+c2r_2d tests passed.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"c2r_2d_test" end time: Feb 27 10:16 UTC
+"c2r_2d_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/12 Testing: c2r_3d_test
+9/12 Test: c2r_3d_test
+Command: "/home/shatwik/Project/clfft/build/test_c2r_3d"
+Directory: /home/shatwik/Project/clfft/build
+"c2r_3d_test" start time: Feb 27 10:16 UTC
+Output:
+----------------------------------------------------------
+c2r_3d tests passed.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"c2r_3d_test" end time: Feb 27 10:16 UTC
+"c2r_3d_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/12 Testing: r2r_1d_test
+10/12 Test: r2r_1d_test
+Command: "/home/shatwik/Project/clfft/build/test_r2r_1d"
+Directory: /home/shatwik/Project/clfft/build
+"r2r_1d_test" start time: Feb 27 10:16 UTC
+Output:
+----------------------------------------------------------
+r2r_1d tests passed.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"r2r_1d_test" end time: Feb 27 10:16 UTC
+"r2r_1d_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/12 Testing: r2r_2d_test
+11/12 Test: r2r_2d_test
+Command: "/home/shatwik/Project/clfft/build/test_r2r_2d"
+Directory: /home/shatwik/Project/clfft/build
+"r2r_2d_test" start time: Feb 27 10:16 UTC
+Output:
+----------------------------------------------------------
+r2r_2d tests passed.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"r2r_2d_test" end time: Feb 27 10:16 UTC
+"r2r_2d_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/12 Testing: r2r_3d_test
+12/12 Test: r2r_3d_test
+Command: "/home/shatwik/Project/clfft/build/test_r2r_3d"
+Directory: /home/shatwik/Project/clfft/build
+"r2r_3d_test" start time: Feb 27 10:16 UTC
+Output:
+----------------------------------------------------------
+r2r_3d tests passed.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"r2r_3d_test" end time: Feb 27 10:16 UTC
+"r2r_3d_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Feb 27 10:16 UTC

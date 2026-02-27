@@ -185,17 +185,160 @@ clapfft/fast:
 .PHONY : clapfft/fast
 
 #=============================================================================
-# Target rules for targets named test_c2c
+# Target rules for targets named test_c2c_1d
 
 # Build rule for target.
-test_c2c: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_c2c
-.PHONY : test_c2c
+test_c2c_1d: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_c2c_1d
+.PHONY : test_c2c_1d
 
 # fast build rule for target.
-test_c2c/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c.dir/build.make CMakeFiles/test_c2c.dir/build
-.PHONY : test_c2c/fast
+test_c2c_1d/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c_1d.dir/build.make CMakeFiles/test_c2c_1d.dir/build
+.PHONY : test_c2c_1d/fast
+
+#=============================================================================
+# Target rules for targets named test_c2c_2d
+
+# Build rule for target.
+test_c2c_2d: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_c2c_2d
+.PHONY : test_c2c_2d
+
+# fast build rule for target.
+test_c2c_2d/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c_2d.dir/build.make CMakeFiles/test_c2c_2d.dir/build
+.PHONY : test_c2c_2d/fast
+
+#=============================================================================
+# Target rules for targets named test_c2c_3d
+
+# Build rule for target.
+test_c2c_3d: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_c2c_3d
+.PHONY : test_c2c_3d
+
+# fast build rule for target.
+test_c2c_3d/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c_3d.dir/build.make CMakeFiles/test_c2c_3d.dir/build
+.PHONY : test_c2c_3d/fast
+
+#=============================================================================
+# Target rules for targets named test_r2c_1d
+
+# Build rule for target.
+test_r2c_1d: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_r2c_1d
+.PHONY : test_r2c_1d
+
+# fast build rule for target.
+test_r2c_1d/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2c_1d.dir/build.make CMakeFiles/test_r2c_1d.dir/build
+.PHONY : test_r2c_1d/fast
+
+#=============================================================================
+# Target rules for targets named test_r2c_2d
+
+# Build rule for target.
+test_r2c_2d: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_r2c_2d
+.PHONY : test_r2c_2d
+
+# fast build rule for target.
+test_r2c_2d/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2c_2d.dir/build.make CMakeFiles/test_r2c_2d.dir/build
+.PHONY : test_r2c_2d/fast
+
+#=============================================================================
+# Target rules for targets named test_r2c_3d
+
+# Build rule for target.
+test_r2c_3d: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_r2c_3d
+.PHONY : test_r2c_3d
+
+# fast build rule for target.
+test_r2c_3d/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2c_3d.dir/build.make CMakeFiles/test_r2c_3d.dir/build
+.PHONY : test_r2c_3d/fast
+
+#=============================================================================
+# Target rules for targets named test_c2r_1d
+
+# Build rule for target.
+test_c2r_1d: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_c2r_1d
+.PHONY : test_c2r_1d
+
+# fast build rule for target.
+test_c2r_1d/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2r_1d.dir/build.make CMakeFiles/test_c2r_1d.dir/build
+.PHONY : test_c2r_1d/fast
+
+#=============================================================================
+# Target rules for targets named test_c2r_2d
+
+# Build rule for target.
+test_c2r_2d: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_c2r_2d
+.PHONY : test_c2r_2d
+
+# fast build rule for target.
+test_c2r_2d/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2r_2d.dir/build.make CMakeFiles/test_c2r_2d.dir/build
+.PHONY : test_c2r_2d/fast
+
+#=============================================================================
+# Target rules for targets named test_c2r_3d
+
+# Build rule for target.
+test_c2r_3d: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_c2r_3d
+.PHONY : test_c2r_3d
+
+# fast build rule for target.
+test_c2r_3d/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2r_3d.dir/build.make CMakeFiles/test_c2r_3d.dir/build
+.PHONY : test_c2r_3d/fast
+
+#=============================================================================
+# Target rules for targets named test_r2r_1d
+
+# Build rule for target.
+test_r2r_1d: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_r2r_1d
+.PHONY : test_r2r_1d
+
+# fast build rule for target.
+test_r2r_1d/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2r_1d.dir/build.make CMakeFiles/test_r2r_1d.dir/build
+.PHONY : test_r2r_1d/fast
+
+#=============================================================================
+# Target rules for targets named test_r2r_2d
+
+# Build rule for target.
+test_r2r_2d: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_r2r_2d
+.PHONY : test_r2r_2d
+
+# fast build rule for target.
+test_r2r_2d/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2r_2d.dir/build.make CMakeFiles/test_r2r_2d.dir/build
+.PHONY : test_r2r_2d/fast
+
+#=============================================================================
+# Target rules for targets named test_r2r_3d
+
+# Build rule for target.
+test_r2r_3d: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_r2r_3d
+.PHONY : test_r2r_3d
+
+# fast build rule for target.
+test_r2r_3d/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2r_3d.dir/build.make CMakeFiles/test_r2r_3d.dir/build
+.PHONY : test_r2r_3d/fast
 
 src/clapfft_api.o: src/clapfft_api.cpp.o
 .PHONY : src/clapfft_api.o
@@ -221,29 +364,293 @@ src/clapfft_api.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/clapfft.dir/build.make CMakeFiles/clapfft.dir/src/clapfft_api.cpp.s
 .PHONY : src/clapfft_api.cpp.s
 
-tests/test_c2c.o: tests/test_c2c.cpp.o
-.PHONY : tests/test_c2c.o
+tests/test_c2c_1d.o: tests/test_c2c_1d.cpp.o
+.PHONY : tests/test_c2c_1d.o
 
 # target to build an object file
-tests/test_c2c.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c.dir/build.make CMakeFiles/test_c2c.dir/tests/test_c2c.cpp.o
-.PHONY : tests/test_c2c.cpp.o
+tests/test_c2c_1d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c_1d.dir/build.make CMakeFiles/test_c2c_1d.dir/tests/test_c2c_1d.cpp.o
+.PHONY : tests/test_c2c_1d.cpp.o
 
-tests/test_c2c.i: tests/test_c2c.cpp.i
-.PHONY : tests/test_c2c.i
+tests/test_c2c_1d.i: tests/test_c2c_1d.cpp.i
+.PHONY : tests/test_c2c_1d.i
 
 # target to preprocess a source file
-tests/test_c2c.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c.dir/build.make CMakeFiles/test_c2c.dir/tests/test_c2c.cpp.i
-.PHONY : tests/test_c2c.cpp.i
+tests/test_c2c_1d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c_1d.dir/build.make CMakeFiles/test_c2c_1d.dir/tests/test_c2c_1d.cpp.i
+.PHONY : tests/test_c2c_1d.cpp.i
 
-tests/test_c2c.s: tests/test_c2c.cpp.s
-.PHONY : tests/test_c2c.s
+tests/test_c2c_1d.s: tests/test_c2c_1d.cpp.s
+.PHONY : tests/test_c2c_1d.s
 
 # target to generate assembly for a file
-tests/test_c2c.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c.dir/build.make CMakeFiles/test_c2c.dir/tests/test_c2c.cpp.s
-.PHONY : tests/test_c2c.cpp.s
+tests/test_c2c_1d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c_1d.dir/build.make CMakeFiles/test_c2c_1d.dir/tests/test_c2c_1d.cpp.s
+.PHONY : tests/test_c2c_1d.cpp.s
+
+tests/test_c2c_2d.o: tests/test_c2c_2d.cpp.o
+.PHONY : tests/test_c2c_2d.o
+
+# target to build an object file
+tests/test_c2c_2d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c_2d.dir/build.make CMakeFiles/test_c2c_2d.dir/tests/test_c2c_2d.cpp.o
+.PHONY : tests/test_c2c_2d.cpp.o
+
+tests/test_c2c_2d.i: tests/test_c2c_2d.cpp.i
+.PHONY : tests/test_c2c_2d.i
+
+# target to preprocess a source file
+tests/test_c2c_2d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c_2d.dir/build.make CMakeFiles/test_c2c_2d.dir/tests/test_c2c_2d.cpp.i
+.PHONY : tests/test_c2c_2d.cpp.i
+
+tests/test_c2c_2d.s: tests/test_c2c_2d.cpp.s
+.PHONY : tests/test_c2c_2d.s
+
+# target to generate assembly for a file
+tests/test_c2c_2d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c_2d.dir/build.make CMakeFiles/test_c2c_2d.dir/tests/test_c2c_2d.cpp.s
+.PHONY : tests/test_c2c_2d.cpp.s
+
+tests/test_c2c_3d.o: tests/test_c2c_3d.cpp.o
+.PHONY : tests/test_c2c_3d.o
+
+# target to build an object file
+tests/test_c2c_3d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c_3d.dir/build.make CMakeFiles/test_c2c_3d.dir/tests/test_c2c_3d.cpp.o
+.PHONY : tests/test_c2c_3d.cpp.o
+
+tests/test_c2c_3d.i: tests/test_c2c_3d.cpp.i
+.PHONY : tests/test_c2c_3d.i
+
+# target to preprocess a source file
+tests/test_c2c_3d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c_3d.dir/build.make CMakeFiles/test_c2c_3d.dir/tests/test_c2c_3d.cpp.i
+.PHONY : tests/test_c2c_3d.cpp.i
+
+tests/test_c2c_3d.s: tests/test_c2c_3d.cpp.s
+.PHONY : tests/test_c2c_3d.s
+
+# target to generate assembly for a file
+tests/test_c2c_3d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2c_3d.dir/build.make CMakeFiles/test_c2c_3d.dir/tests/test_c2c_3d.cpp.s
+.PHONY : tests/test_c2c_3d.cpp.s
+
+tests/test_c2r_1d.o: tests/test_c2r_1d.cpp.o
+.PHONY : tests/test_c2r_1d.o
+
+# target to build an object file
+tests/test_c2r_1d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2r_1d.dir/build.make CMakeFiles/test_c2r_1d.dir/tests/test_c2r_1d.cpp.o
+.PHONY : tests/test_c2r_1d.cpp.o
+
+tests/test_c2r_1d.i: tests/test_c2r_1d.cpp.i
+.PHONY : tests/test_c2r_1d.i
+
+# target to preprocess a source file
+tests/test_c2r_1d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2r_1d.dir/build.make CMakeFiles/test_c2r_1d.dir/tests/test_c2r_1d.cpp.i
+.PHONY : tests/test_c2r_1d.cpp.i
+
+tests/test_c2r_1d.s: tests/test_c2r_1d.cpp.s
+.PHONY : tests/test_c2r_1d.s
+
+# target to generate assembly for a file
+tests/test_c2r_1d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2r_1d.dir/build.make CMakeFiles/test_c2r_1d.dir/tests/test_c2r_1d.cpp.s
+.PHONY : tests/test_c2r_1d.cpp.s
+
+tests/test_c2r_2d.o: tests/test_c2r_2d.cpp.o
+.PHONY : tests/test_c2r_2d.o
+
+# target to build an object file
+tests/test_c2r_2d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2r_2d.dir/build.make CMakeFiles/test_c2r_2d.dir/tests/test_c2r_2d.cpp.o
+.PHONY : tests/test_c2r_2d.cpp.o
+
+tests/test_c2r_2d.i: tests/test_c2r_2d.cpp.i
+.PHONY : tests/test_c2r_2d.i
+
+# target to preprocess a source file
+tests/test_c2r_2d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2r_2d.dir/build.make CMakeFiles/test_c2r_2d.dir/tests/test_c2r_2d.cpp.i
+.PHONY : tests/test_c2r_2d.cpp.i
+
+tests/test_c2r_2d.s: tests/test_c2r_2d.cpp.s
+.PHONY : tests/test_c2r_2d.s
+
+# target to generate assembly for a file
+tests/test_c2r_2d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2r_2d.dir/build.make CMakeFiles/test_c2r_2d.dir/tests/test_c2r_2d.cpp.s
+.PHONY : tests/test_c2r_2d.cpp.s
+
+tests/test_c2r_3d.o: tests/test_c2r_3d.cpp.o
+.PHONY : tests/test_c2r_3d.o
+
+# target to build an object file
+tests/test_c2r_3d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2r_3d.dir/build.make CMakeFiles/test_c2r_3d.dir/tests/test_c2r_3d.cpp.o
+.PHONY : tests/test_c2r_3d.cpp.o
+
+tests/test_c2r_3d.i: tests/test_c2r_3d.cpp.i
+.PHONY : tests/test_c2r_3d.i
+
+# target to preprocess a source file
+tests/test_c2r_3d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2r_3d.dir/build.make CMakeFiles/test_c2r_3d.dir/tests/test_c2r_3d.cpp.i
+.PHONY : tests/test_c2r_3d.cpp.i
+
+tests/test_c2r_3d.s: tests/test_c2r_3d.cpp.s
+.PHONY : tests/test_c2r_3d.s
+
+# target to generate assembly for a file
+tests/test_c2r_3d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_c2r_3d.dir/build.make CMakeFiles/test_c2r_3d.dir/tests/test_c2r_3d.cpp.s
+.PHONY : tests/test_c2r_3d.cpp.s
+
+tests/test_r2c_1d.o: tests/test_r2c_1d.cpp.o
+.PHONY : tests/test_r2c_1d.o
+
+# target to build an object file
+tests/test_r2c_1d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2c_1d.dir/build.make CMakeFiles/test_r2c_1d.dir/tests/test_r2c_1d.cpp.o
+.PHONY : tests/test_r2c_1d.cpp.o
+
+tests/test_r2c_1d.i: tests/test_r2c_1d.cpp.i
+.PHONY : tests/test_r2c_1d.i
+
+# target to preprocess a source file
+tests/test_r2c_1d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2c_1d.dir/build.make CMakeFiles/test_r2c_1d.dir/tests/test_r2c_1d.cpp.i
+.PHONY : tests/test_r2c_1d.cpp.i
+
+tests/test_r2c_1d.s: tests/test_r2c_1d.cpp.s
+.PHONY : tests/test_r2c_1d.s
+
+# target to generate assembly for a file
+tests/test_r2c_1d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2c_1d.dir/build.make CMakeFiles/test_r2c_1d.dir/tests/test_r2c_1d.cpp.s
+.PHONY : tests/test_r2c_1d.cpp.s
+
+tests/test_r2c_2d.o: tests/test_r2c_2d.cpp.o
+.PHONY : tests/test_r2c_2d.o
+
+# target to build an object file
+tests/test_r2c_2d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2c_2d.dir/build.make CMakeFiles/test_r2c_2d.dir/tests/test_r2c_2d.cpp.o
+.PHONY : tests/test_r2c_2d.cpp.o
+
+tests/test_r2c_2d.i: tests/test_r2c_2d.cpp.i
+.PHONY : tests/test_r2c_2d.i
+
+# target to preprocess a source file
+tests/test_r2c_2d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2c_2d.dir/build.make CMakeFiles/test_r2c_2d.dir/tests/test_r2c_2d.cpp.i
+.PHONY : tests/test_r2c_2d.cpp.i
+
+tests/test_r2c_2d.s: tests/test_r2c_2d.cpp.s
+.PHONY : tests/test_r2c_2d.s
+
+# target to generate assembly for a file
+tests/test_r2c_2d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2c_2d.dir/build.make CMakeFiles/test_r2c_2d.dir/tests/test_r2c_2d.cpp.s
+.PHONY : tests/test_r2c_2d.cpp.s
+
+tests/test_r2c_3d.o: tests/test_r2c_3d.cpp.o
+.PHONY : tests/test_r2c_3d.o
+
+# target to build an object file
+tests/test_r2c_3d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2c_3d.dir/build.make CMakeFiles/test_r2c_3d.dir/tests/test_r2c_3d.cpp.o
+.PHONY : tests/test_r2c_3d.cpp.o
+
+tests/test_r2c_3d.i: tests/test_r2c_3d.cpp.i
+.PHONY : tests/test_r2c_3d.i
+
+# target to preprocess a source file
+tests/test_r2c_3d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2c_3d.dir/build.make CMakeFiles/test_r2c_3d.dir/tests/test_r2c_3d.cpp.i
+.PHONY : tests/test_r2c_3d.cpp.i
+
+tests/test_r2c_3d.s: tests/test_r2c_3d.cpp.s
+.PHONY : tests/test_r2c_3d.s
+
+# target to generate assembly for a file
+tests/test_r2c_3d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2c_3d.dir/build.make CMakeFiles/test_r2c_3d.dir/tests/test_r2c_3d.cpp.s
+.PHONY : tests/test_r2c_3d.cpp.s
+
+tests/test_r2r_1d.o: tests/test_r2r_1d.cpp.o
+.PHONY : tests/test_r2r_1d.o
+
+# target to build an object file
+tests/test_r2r_1d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2r_1d.dir/build.make CMakeFiles/test_r2r_1d.dir/tests/test_r2r_1d.cpp.o
+.PHONY : tests/test_r2r_1d.cpp.o
+
+tests/test_r2r_1d.i: tests/test_r2r_1d.cpp.i
+.PHONY : tests/test_r2r_1d.i
+
+# target to preprocess a source file
+tests/test_r2r_1d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2r_1d.dir/build.make CMakeFiles/test_r2r_1d.dir/tests/test_r2r_1d.cpp.i
+.PHONY : tests/test_r2r_1d.cpp.i
+
+tests/test_r2r_1d.s: tests/test_r2r_1d.cpp.s
+.PHONY : tests/test_r2r_1d.s
+
+# target to generate assembly for a file
+tests/test_r2r_1d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2r_1d.dir/build.make CMakeFiles/test_r2r_1d.dir/tests/test_r2r_1d.cpp.s
+.PHONY : tests/test_r2r_1d.cpp.s
+
+tests/test_r2r_2d.o: tests/test_r2r_2d.cpp.o
+.PHONY : tests/test_r2r_2d.o
+
+# target to build an object file
+tests/test_r2r_2d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2r_2d.dir/build.make CMakeFiles/test_r2r_2d.dir/tests/test_r2r_2d.cpp.o
+.PHONY : tests/test_r2r_2d.cpp.o
+
+tests/test_r2r_2d.i: tests/test_r2r_2d.cpp.i
+.PHONY : tests/test_r2r_2d.i
+
+# target to preprocess a source file
+tests/test_r2r_2d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2r_2d.dir/build.make CMakeFiles/test_r2r_2d.dir/tests/test_r2r_2d.cpp.i
+.PHONY : tests/test_r2r_2d.cpp.i
+
+tests/test_r2r_2d.s: tests/test_r2r_2d.cpp.s
+.PHONY : tests/test_r2r_2d.s
+
+# target to generate assembly for a file
+tests/test_r2r_2d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2r_2d.dir/build.make CMakeFiles/test_r2r_2d.dir/tests/test_r2r_2d.cpp.s
+.PHONY : tests/test_r2r_2d.cpp.s
+
+tests/test_r2r_3d.o: tests/test_r2r_3d.cpp.o
+.PHONY : tests/test_r2r_3d.o
+
+# target to build an object file
+tests/test_r2r_3d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2r_3d.dir/build.make CMakeFiles/test_r2r_3d.dir/tests/test_r2r_3d.cpp.o
+.PHONY : tests/test_r2r_3d.cpp.o
+
+tests/test_r2r_3d.i: tests/test_r2r_3d.cpp.i
+.PHONY : tests/test_r2r_3d.i
+
+# target to preprocess a source file
+tests/test_r2r_3d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2r_3d.dir/build.make CMakeFiles/test_r2r_3d.dir/tests/test_r2r_3d.cpp.i
+.PHONY : tests/test_r2r_3d.cpp.i
+
+tests/test_r2r_3d.s: tests/test_r2r_3d.cpp.s
+.PHONY : tests/test_r2r_3d.s
+
+# target to generate assembly for a file
+tests/test_r2r_3d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_r2r_3d.dir/build.make CMakeFiles/test_r2r_3d.dir/tests/test_r2r_3d.cpp.s
+.PHONY : tests/test_r2r_3d.cpp.s
 
 # Help Target
 help:
@@ -259,13 +666,57 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... clapfft"
-	@echo "... test_c2c"
+	@echo "... test_c2c_1d"
+	@echo "... test_c2c_2d"
+	@echo "... test_c2c_3d"
+	@echo "... test_c2r_1d"
+	@echo "... test_c2r_2d"
+	@echo "... test_c2r_3d"
+	@echo "... test_r2c_1d"
+	@echo "... test_r2c_2d"
+	@echo "... test_r2c_3d"
+	@echo "... test_r2r_1d"
+	@echo "... test_r2r_2d"
+	@echo "... test_r2r_3d"
 	@echo "... src/clapfft_api.o"
 	@echo "... src/clapfft_api.i"
 	@echo "... src/clapfft_api.s"
-	@echo "... tests/test_c2c.o"
-	@echo "... tests/test_c2c.i"
-	@echo "... tests/test_c2c.s"
+	@echo "... tests/test_c2c_1d.o"
+	@echo "... tests/test_c2c_1d.i"
+	@echo "... tests/test_c2c_1d.s"
+	@echo "... tests/test_c2c_2d.o"
+	@echo "... tests/test_c2c_2d.i"
+	@echo "... tests/test_c2c_2d.s"
+	@echo "... tests/test_c2c_3d.o"
+	@echo "... tests/test_c2c_3d.i"
+	@echo "... tests/test_c2c_3d.s"
+	@echo "... tests/test_c2r_1d.o"
+	@echo "... tests/test_c2r_1d.i"
+	@echo "... tests/test_c2r_1d.s"
+	@echo "... tests/test_c2r_2d.o"
+	@echo "... tests/test_c2r_2d.i"
+	@echo "... tests/test_c2r_2d.s"
+	@echo "... tests/test_c2r_3d.o"
+	@echo "... tests/test_c2r_3d.i"
+	@echo "... tests/test_c2r_3d.s"
+	@echo "... tests/test_r2c_1d.o"
+	@echo "... tests/test_r2c_1d.i"
+	@echo "... tests/test_r2c_1d.s"
+	@echo "... tests/test_r2c_2d.o"
+	@echo "... tests/test_r2c_2d.i"
+	@echo "... tests/test_r2c_2d.s"
+	@echo "... tests/test_r2c_3d.o"
+	@echo "... tests/test_r2c_3d.i"
+	@echo "... tests/test_r2c_3d.s"
+	@echo "... tests/test_r2r_1d.o"
+	@echo "... tests/test_r2r_1d.i"
+	@echo "... tests/test_r2r_1d.s"
+	@echo "... tests/test_r2r_2d.o"
+	@echo "... tests/test_r2r_2d.i"
+	@echo "... tests/test_r2r_2d.s"
+	@echo "... tests/test_r2r_3d.o"
+	@echo "... tests/test_r2r_3d.i"
+	@echo "... tests/test_r2r_3d.s"
 .PHONY : help
 
 

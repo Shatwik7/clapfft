@@ -1,5 +1,16 @@
 /home/shatwik/Project/clfft/build/CMakeFiles/clapfft.dir
-/home/shatwik/Project/clfft/build/CMakeFiles/test_c2c.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_c2c_1d.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_c2c_2d.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_c2c_3d.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_r2c_1d.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_r2c_2d.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_r2c_3d.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_c2r_1d.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_c2r_2d.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_c2r_3d.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_r2r_1d.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_r2r_2d.dir
+/home/shatwik/Project/clfft/build/CMakeFiles/test_r2r_3d.dir
 /home/shatwik/Project/clfft/build/CMakeFiles/test.dir
 /home/shatwik/Project/clfft/build/CMakeFiles/edit_cache.dir
 /home/shatwik/Project/clfft/build/CMakeFiles/rebuild_cache.dir
