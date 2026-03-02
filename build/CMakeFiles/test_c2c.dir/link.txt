@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/test_c2c.dir/tests/test_c2c.cpp.o -o test_c2c  libclapfft.a -lfftw3f -lfftw3 -lfftw3l 
