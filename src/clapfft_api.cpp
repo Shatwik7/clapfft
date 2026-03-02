@@ -1,5 +1,5 @@
 #include <clapfft/clapfft_api.hpp>
-#include <clapfft/fftw_traits.hpp>
+#include <clapfft/fft_traits.hpp>
 #include <clapfft/fft_plan_cache.hpp>
 #include <vector>
 #include <complex>
@@ -12,7 +12,7 @@ namespace clapfft
     template <typename T>
     void FFT::c2c_1d(const std::vector<std::complex<T>> &input, std::vector<std::complex<T>> &output, int sign)
     {
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         int n = input.size();
         output.resize(n);
 
@@ -27,7 +27,7 @@ namespace clapfft
     template <typename T>
     void FFT::c2c_2d(const std::vector<std::vector<std::complex<T>>> &input, std::vector<std::vector<std::complex<T>>> &output, int sign)
     {
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         int n0 = input.size();
         if (n0 == 0)
             return;
@@ -64,7 +64,7 @@ namespace clapfft
     template <typename T>
     void FFT::c2c_3d(const std::vector<std::vector<std::vector<std::complex<T>>>> &input, std::vector<std::vector<std::vector<std::complex<T>>>> &output, int sign)
     {
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         int n0 = input.size();
         if (n0 == 0)
             return;
@@ -111,7 +111,7 @@ namespace clapfft
     template <typename T>
     void FFT::c2r_1d(const std::vector<std::complex<T>> &input, std::vector<T> &output)
     {
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         int n_complex = input.size();
         int n_real = 2 * (n_complex - 1);
         output.resize(n_real);
@@ -127,7 +127,7 @@ namespace clapfft
     template <typename T>
     void FFT::c2r_2d(const std::vector<std::vector<std::complex<T>>> &input, std::vector<std::vector<T>> &output)
     {
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         int n0 = input.size();
         if (n0 == 0)
             return;
@@ -165,7 +165,7 @@ namespace clapfft
     template <typename T>
     void FFT::c2r_3d(const std::vector<std::vector<std::vector<std::complex<T>>>> &input, std::vector<std::vector<std::vector<T>>> &output)
     {
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         int n0 = input.size();
         if (n0 == 0)
             return;
@@ -212,7 +212,7 @@ namespace clapfft
     template <typename T>
     void FFT::r2c_1d(const std::vector<T> &input, std::vector<std::complex<T>> &output)
     {
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         int n = input.size();
         output.resize(n / 2 + 1);
 
@@ -227,7 +227,7 @@ namespace clapfft
     template <typename T>
     void FFT::r2c_2d(const std::vector<std::vector<T>> &input, std::vector<std::vector<std::complex<T>>> &output)
     {
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         int n0 = input.size();
         if (n0 == 0)
             return;
@@ -264,7 +264,7 @@ namespace clapfft
     template <typename T>
     void FFT::r2c_3d(const std::vector<std::vector<std::vector<T>>> &input, std::vector<std::vector<std::vector<std::complex<T>>>> &output)
     {
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         int n0 = input.size();
         if (n0 == 0)
             return;
@@ -310,7 +310,7 @@ namespace clapfft
     template <typename T>
     void FFT::r2r_1d(const std::vector<T> &input, std::vector<T> &output, int kind)
     {
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         int n = input.size();
         output.resize(n);
 
@@ -325,7 +325,7 @@ namespace clapfft
     template <typename T>
     void FFT::r2r_2d(const std::vector<std::vector<T>> &input, std::vector<std::vector<T>> &output, int kind0, int kind1)
     {
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         int n0 = input.size();
         if (n0 == 0)
             return;
@@ -362,7 +362,7 @@ namespace clapfft
     template <typename T>
     void FFT::r2r_3d(const std::vector<std::vector<std::vector<T>>> &input, std::vector<std::vector<std::vector<T>>> &output, int kind0, int kind1, int kind2)
     {
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         int n0 = input.size();
         if (n0 == 0)
             return;

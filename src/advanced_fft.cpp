@@ -1,5 +1,5 @@
 #include <clapfft/advanced_fft.hpp>
-#include <clapfft/fftw_traits.hpp>
+#include <clapfft/fft_traits.hpp>
 #include <fftw3.h>
 #include <mutex>
 #include <vector>
@@ -25,7 +25,7 @@ namespace clapfft
             return;
         }
 
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         auto in_ptr = reinterpret_cast<typename traits::complex_type *>(in);
         auto out_ptr = reinterpret_cast<typename traits::complex_type *>(out);
 
@@ -59,7 +59,7 @@ namespace clapfft
             return;
         }
 
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         auto out_ptr = reinterpret_cast<typename traits::complex_type *>(out);
 
         typename traits::plan_type plan;
@@ -92,7 +92,7 @@ namespace clapfft
             return;
         }
 
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         auto in_ptr = reinterpret_cast<typename traits::complex_type *>(in);
 
         typename traits::plan_type plan;
@@ -126,7 +126,7 @@ namespace clapfft
             return;
         }
 
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
 
         typename traits::plan_type plan;
         {

@@ -1,5 +1,5 @@
 #pragma once
-#include <clapfft/fftw_traits.hpp>
+#include <clapfft/fft_traits.hpp>
 #include <unordered_map>
 #include <memory>
 #include <mutex>
@@ -54,7 +54,7 @@ namespace clapfft
     class PlanCache
     {
     public:
-        using traits = fftw_trait<T>;
+        using traits = fft_trait<T>;
         using plan_type = typename traits::plan_type;
 
         struct Wrapper

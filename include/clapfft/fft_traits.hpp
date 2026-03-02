@@ -1,5 +1,5 @@
-#ifndef CLAPFFT_FFTW_TRAITS_HPP
-#define CLAPFFT_FFTW_TRAITS_HPP
+#ifndef CLAPFFT_FFT_TRAITS_HPP
+#define CLAPFFT_FFT_TRAITS_HPP
 
 #include <fftw3.h>
 #include <vector>
@@ -9,10 +9,10 @@ namespace clapfft
 
     // Traits to map T to FFTW types
     template <typename T>
-    struct fftw_trait;
+    struct fft_trait;
 
     template <>
-    struct fftw_trait<float>
+    struct fft_trait<float>
     {
         using complex_type = fftwf_complex;
         using plan_type = fftwf_plan;
@@ -180,7 +180,7 @@ namespace clapfft
     };
 
     template <>
-    struct fftw_trait<double>
+    struct fft_trait<double>
     {
         using complex_type = fftw_complex;
         using plan_type = fftw_plan;
@@ -348,7 +348,7 @@ namespace clapfft
     };
 
     template <>
-    struct fftw_trait<long double>
+    struct fft_trait<long double>
     {
         using complex_type = fftwl_complex;
         using plan_type = fftwl_plan;
@@ -517,4 +517,4 @@ namespace clapfft
 
 } // namespace clapfft
 
-#endif // CLAPFFT_FFTW_TRAITS_HPP
+#endif // CLAPFFT_FFT_TRAITS_HPP
