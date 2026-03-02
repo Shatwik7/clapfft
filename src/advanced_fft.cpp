@@ -2,7 +2,6 @@
 #include <clapfft/fft_traits.hpp>
 #include <fftw3.h>
 #include <mutex>
-#include <vector>
 
 namespace clapfft
 {

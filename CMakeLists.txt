@@ -25,6 +25,7 @@ include_directories(${FFTW3L_INCLUDE_DIRS})
 add_library(clapfft STATIC
     src/clapfft_api.cpp
     src/advanced_fft.cpp
+    src/guru_fft.cpp
 )
 
 # Link FFTW3 to our library. We need to link all three precision versions
@@ -54,6 +55,7 @@ set(CLAPFFT_TEST_CASES
     advanced_many_dft_r2c
     advanced_many_dft_c2r
     advanced_many_r2r
+    advanced_guru
 )
 
 foreach(case IN LISTS CLAPFFT_TEST_CASES)
