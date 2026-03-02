@@ -2,6 +2,7 @@
 #define CLAPFFT_FFTW_TRAITS_HPP
 
 #include <fftw3.h>
+#include <vector>
 
 namespace clapfft
 {
@@ -27,6 +28,19 @@ namespace clapfft
         static plan_type plan_dft_3d(int n0, int n1, int n2, complex_type *in, complex_type *out, int sign, unsigned flags)
         {
             return fftwf_plan_dft_3d(n0, n1, n2, in, out, sign, flags);
+        }
+
+        static plan_type plan_many_dft(int rank, const int *n, int howmany,
+                                       complex_type *in, const int *inembed,
+                                       int istride, int idist,
+                                       complex_type *out, const int *onembed,
+                                       int ostride, int odist,
+                                       int sign, unsigned flags)
+        {
+            return fftwf_plan_many_dft(rank, n, howmany,
+                                       in, inembed, istride, idist,
+                                       out, onembed, ostride, odist,
+                                       sign, flags);
         }
 
         static plan_type plan_dft_c2r_1d(int n, complex_type *in, float *out, unsigned flags)
@@ -59,6 +73,32 @@ namespace clapfft
             return fftwf_plan_dft_r2c_3d(n0, n1, n2, in, out, flags);
         }
 
+        static plan_type plan_many_dft_r2c(int rank, const int *n, int howmany,
+                                           float *in, const int *inembed,
+                                           int istride, int idist,
+                                           complex_type *out, const int *onembed,
+                                           int ostride, int odist,
+                                           unsigned flags)
+        {
+            return fftwf_plan_many_dft_r2c(rank, n, howmany,
+                                           in, inembed, istride, idist,
+                                           out, onembed, ostride, odist,
+                                           flags);
+        }
+
+        static plan_type plan_many_dft_c2r(int rank, const int *n, int howmany,
+                                           complex_type *in, const int *inembed,
+                                           int istride, int idist,
+                                           float *out, const int *onembed,
+                                           int ostride, int odist,
+                                           unsigned flags)
+        {
+            return fftwf_plan_many_dft_c2r(rank, n, howmany,
+                                           in, inembed, istride, idist,
+                                           out, onembed, ostride, odist,
+                                           flags);
+        }
+
         static plan_type plan_r2r_1d(int n, float *in, float *out, int kind, unsigned flags)
         {
             return fftwf_plan_r2r_1d(n, in, out, static_cast<fftwf_r2r_kind>(kind), flags);
@@ -89,6 +129,24 @@ namespace clapfft
                 static_cast<fftwf_r2r_kind>(kind2),
                 flags);
         }
+
+            static plan_type plan_many_r2r(int rank, const int *n, int howmany,
+                                           float *in, const int *inembed,
+                                           int istride, int idist,
+                                           float *out, const int *onembed,
+                                           int ostride, int odist,
+                                           const int *kind, unsigned flags)
+            {
+                std::vector<fftwf_r2r_kind> typed_kind(static_cast<std::size_t>(rank));
+                for (int i = 0; i < rank; ++i)
+                {
+                    typed_kind[static_cast<std::size_t>(i)] = static_cast<fftwf_r2r_kind>(kind[i]);
+                }
+                return fftwf_plan_many_r2r(rank, n, howmany,
+                               in, inembed, istride, idist,
+                               out, onembed, ostride, odist,
+                                           typed_kind.data(), flags);
+            }
 
         static void execute(plan_type plan)
         {
@@ -140,6 +198,19 @@ namespace clapfft
             return fftw_plan_dft_3d(n0, n1, n2, in, out, sign, flags);
         }
 
+        static plan_type plan_many_dft(int rank, const int *n, int howmany,
+                                       complex_type *in, const int *inembed,
+                                       int istride, int idist,
+                                       complex_type *out, const int *onembed,
+                                       int ostride, int odist,
+                                       int sign, unsigned flags)
+        {
+            return fftw_plan_many_dft(rank, n, howmany,
+                                      in, inembed, istride, idist,
+                                      out, onembed, ostride, odist,
+                                      sign, flags);
+        }
+
         static plan_type plan_dft_c2r_1d(int n, complex_type *in, double *out, unsigned flags)
         {
             return fftw_plan_dft_c2r_1d(n, in, out, flags);
@@ -168,6 +239,32 @@ namespace clapfft
         static plan_type plan_dft_r2c_3d(int n0, int n1, int n2, double *in, complex_type *out, unsigned flags)
         {
             return fftw_plan_dft_r2c_3d(n0, n1, n2, in, out, flags);
+        }
+
+        static plan_type plan_many_dft_r2c(int rank, const int *n, int howmany,
+                                           double *in, const int *inembed,
+                                           int istride, int idist,
+                                           complex_type *out, const int *onembed,
+                                           int ostride, int odist,
+                                           unsigned flags)
+        {
+            return fftw_plan_many_dft_r2c(rank, n, howmany,
+                                          in, inembed, istride, idist,
+                                          out, onembed, ostride, odist,
+                                          flags);
+        }
+
+        static plan_type plan_many_dft_c2r(int rank, const int *n, int howmany,
+                                           complex_type *in, const int *inembed,
+                                           int istride, int idist,
+                                           double *out, const int *onembed,
+                                           int ostride, int odist,
+                                           unsigned flags)
+        {
+            return fftw_plan_many_dft_c2r(rank, n, howmany,
+                                          in, inembed, istride, idist,
+                                          out, onembed, ostride, odist,
+                                          flags);
         }
 
         static plan_type plan_r2r_1d(int n, double *in, double *out, int kind, unsigned flags)
@@ -200,6 +297,24 @@ namespace clapfft
                 static_cast<fftw_r2r_kind>(kind2),
                 flags);
         }
+
+            static plan_type plan_many_r2r(int rank, const int *n, int howmany,
+                                           double *in, const int *inembed,
+                                           int istride, int idist,
+                                           double *out, const int *onembed,
+                                           int ostride, int odist,
+                                           const int *kind, unsigned flags)
+            {
+                std::vector<fftw_r2r_kind> typed_kind(static_cast<std::size_t>(rank));
+                for (int i = 0; i < rank; ++i)
+                {
+                    typed_kind[static_cast<std::size_t>(i)] = static_cast<fftw_r2r_kind>(kind[i]);
+                }
+                return fftw_plan_many_r2r(rank, n, howmany,
+                              in, inembed, istride, idist,
+                              out, onembed, ostride, odist,
+                                          typed_kind.data(), flags);
+            }
 
         static void execute(plan_type plan)
         {
@@ -251,6 +366,19 @@ namespace clapfft
             return fftwl_plan_dft_3d(n0, n1, n2, in, out, sign, flags);
         }
 
+        static plan_type plan_many_dft(int rank, const int *n, int howmany,
+                                       complex_type *in, const int *inembed,
+                                       int istride, int idist,
+                                       complex_type *out, const int *onembed,
+                                       int ostride, int odist,
+                                       int sign, unsigned flags)
+        {
+            return fftwl_plan_many_dft(rank, n, howmany,
+                                       in, inembed, istride, idist,
+                                       out, onembed, ostride, odist,
+                                       sign, flags);
+        }
+
         static plan_type plan_dft_c2r_1d(int n, complex_type *in, long double *out, unsigned flags)
         {
             return fftwl_plan_dft_c2r_1d(n, in, out, flags);
@@ -279,6 +407,32 @@ namespace clapfft
         static plan_type plan_dft_r2c_3d(int n0, int n1, int n2, long double *in, complex_type *out, unsigned flags)
         {
             return fftwl_plan_dft_r2c_3d(n0, n1, n2, in, out, flags);
+        }
+
+        static plan_type plan_many_dft_r2c(int rank, const int *n, int howmany,
+                                           long double *in, const int *inembed,
+                                           int istride, int idist,
+                                           complex_type *out, const int *onembed,
+                                           int ostride, int odist,
+                                           unsigned flags)
+        {
+            return fftwl_plan_many_dft_r2c(rank, n, howmany,
+                                           in, inembed, istride, idist,
+                                           out, onembed, ostride, odist,
+                                           flags);
+        }
+
+        static plan_type plan_many_dft_c2r(int rank, const int *n, int howmany,
+                                           complex_type *in, const int *inembed,
+                                           int istride, int idist,
+                                           long double *out, const int *onembed,
+                                           int ostride, int odist,
+                                           unsigned flags)
+        {
+            return fftwl_plan_many_dft_c2r(rank, n, howmany,
+                                           in, inembed, istride, idist,
+                                           out, onembed, ostride, odist,
+                                           flags);
         }
 
         static plan_type plan_r2r_1d(int n, long double *in, long double *out, int kind, unsigned flags)
@@ -311,6 +465,24 @@ namespace clapfft
                 static_cast<fftwl_r2r_kind>(kind2),
                 flags);
         }
+
+            static plan_type plan_many_r2r(int rank, const int *n, int howmany,
+                                           long double *in, const int *inembed,
+                                           int istride, int idist,
+                                           long double *out, const int *onembed,
+                                           int ostride, int odist,
+                                           const int *kind, unsigned flags)
+            {
+                std::vector<fftwl_r2r_kind> typed_kind(static_cast<std::size_t>(rank));
+                for (int i = 0; i < rank; ++i)
+                {
+                    typed_kind[static_cast<std::size_t>(i)] = static_cast<fftwl_r2r_kind>(kind[i]);
+                }
+                return fftwl_plan_many_r2r(rank, n, howmany,
+                               in, inembed, istride, idist,
+                               out, onembed, ostride, odist,
+                                           typed_kind.data(), flags);
+            }
 
         static void execute(plan_type plan)
         {
