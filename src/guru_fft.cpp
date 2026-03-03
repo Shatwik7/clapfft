@@ -22,7 +22,7 @@ namespace
 
 namespace clapfft
 {
-    fft_plan GuruFFT::plan_guru_dft(
+    plan_type GuruFFT::plan_guru_dft(
         int rank, const fftw_iodim *dims,
         int howmany_rank, const fftw_iodim *howmany_dims,
         fftw_complex *in, fftw_complex *out,
@@ -38,7 +38,7 @@ namespace clapfft
         return traits::plan_guru_dft(rank, dims, howmany_rank, howmany_dims, in, out, sign, flags);
     }
 
-    fft_plan GuruFFT::plan_guru_split_dft(
+    plan_type GuruFFT::plan_guru_split_dft(
         int rank, const fftw_iodim *dims,
         int howmany_rank, const fftw_iodim *howmany_dims,
         double *ri, double *ii, double *ro, double *io,
@@ -54,7 +54,7 @@ namespace clapfft
         return traits::plan_guru_split_dft(rank, dims, howmany_rank, howmany_dims, ri, ii, ro, io, flags);
     }
 
-    fft_plan GuruFFT::plan_guru_dft_r2c(
+    plan_type GuruFFT::plan_guru_dft_r2c(
         int rank, const fftw_iodim *dims,
         int howmany_rank, const fftw_iodim *howmany_dims,
         double *in, fftw_complex *out,
@@ -70,7 +70,7 @@ namespace clapfft
         return traits::plan_guru_dft_r2c(rank, dims, howmany_rank, howmany_dims, in, out, flags);
     }
 
-    fft_plan GuruFFT::plan_guru_split_dft_r2c(
+    plan_type GuruFFT::plan_guru_split_dft_r2c(
         int rank, const fftw_iodim *dims,
         int howmany_rank, const fftw_iodim *howmany_dims,
         double *in, double *ro, double *io,
@@ -86,7 +86,7 @@ namespace clapfft
         return traits::plan_guru_split_dft_r2c(rank, dims, howmany_rank, howmany_dims, in, ro, io, flags);
     }
 
-    fft_plan GuruFFT::plan_guru_dft_c2r(
+    plan_type GuruFFT::plan_guru_dft_c2r(
         int rank, const fftw_iodim *dims,
         int howmany_rank, const fftw_iodim *howmany_dims,
         fftw_complex *in, double *out,
@@ -102,7 +102,7 @@ namespace clapfft
         return traits::plan_guru_dft_c2r(rank, dims, howmany_rank, howmany_dims, in, out, flags);
     }
 
-    fft_plan GuruFFT::plan_guru_split_dft_c2r(
+    plan_type GuruFFT::plan_guru_split_dft_c2r(
         int rank, const fftw_iodim *dims,
         int howmany_rank, const fftw_iodim *howmany_dims,
         double *ri, double *ii, double *out,
@@ -118,7 +118,7 @@ namespace clapfft
         return traits::plan_guru_split_dft_c2r(rank, dims, howmany_rank, howmany_dims, ri, ii, out, flags);
     }
 
-    fft_plan GuruFFT::plan_guru_r2r(
+    plan_type GuruFFT::plan_guru_r2r(
         int rank, const fftw_iodim *dims,
         int howmany_rank,
         const fftw_iodim *howmany_dims,
@@ -136,7 +136,7 @@ namespace clapfft
         return traits::plan_guru_r2r(rank, dims, howmany_rank, howmany_dims, in, out, kind, flags);
     }
 
-    fft_plan GuruFFT::plan_guru64_dft(
+    plan_type GuruFFT::plan_guru64_dft(
         int rank, const fftw_iodim64 *dims,
         int howmany_rank, const fftw_iodim64 *howmany_dims,
         fftw_complex *in, fftw_complex *out,
