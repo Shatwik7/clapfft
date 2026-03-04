@@ -8,6 +8,8 @@ include(GNUInstallDirs)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(CLAPFFT_LINK_STATIC_FFTW "Link FFTW statically into shared clapfft library" ON)
+
 # Find FFTW3 using pkg-config
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(FFTW3F REQUIRED fftw3f)
@@ -21,16 +23,38 @@ include_directories(${FFTW3D_INCLUDE_DIRS})
 include_directories(${FFTW3L_INCLUDE_DIRS})
 
 # --- Library ---
-# Create a static library for our project
-add_library(clapfft STATIC
+# Create a shared library for our project
+add_library(clapfft SHARED
     src/clapfft_api.cpp
     src/advanced_fft.cpp
     src/guru_fft.cpp
 )
 
-# Link FFTW3 to our library. We need to link all three precision versions
-# because our library supports float, double, and long double.
-target_link_libraries(clapfft PRIVATE ${FFTW3F_LIBRARIES} ${FFTW3D_LIBRARIES} ${FFTW3L_LIBRARIES})
+set_target_properties(clapfft PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+)
+
+# Link FFTW3 to our library. We need all three precision versions because the
+# wrapper supports float, double, and long double.
+if(CLAPFFT_LINK_STATIC_FFTW)
+    set(_saved_suffixes "${CMAKE_FIND_LIBRARY_SUFFIXES}")
+    set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+
+    find_library(FFTW3F_STATIC_LIB NAMES fftw3f HINTS ${FFTW3F_LIBRARY_DIRS} REQUIRED)
+    find_library(FFTW3D_STATIC_LIB NAMES fftw3 HINTS ${FFTW3D_LIBRARY_DIRS} REQUIRED)
+    find_library(FFTW3L_STATIC_LIB NAMES fftw3l HINTS ${FFTW3L_LIBRARY_DIRS} REQUIRED)
+
+    set(CMAKE_FIND_LIBRARY_SUFFIXES "${_saved_suffixes}")
+
+    target_link_libraries(clapfft PRIVATE
+        ${FFTW3F_STATIC_LIB}
+        ${FFTW3D_STATIC_LIB}
+        ${FFTW3L_STATIC_LIB}
+        m
+    )
+else()
+    target_link_libraries(clapfft PRIVATE ${FFTW3F_LIBRARIES} ${FFTW3D_LIBRARIES} ${FFTW3L_LIBRARIES})
+endif()
 
 
 # --- Test Executable ---
