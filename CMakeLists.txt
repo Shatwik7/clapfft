@@ -3,10 +3,15 @@ project(clfft CXX)
 
 # Include GNUInstallDirs to use standard installation directories
 include(GNUInstallDirs)
+find_package(Threads REQUIRED)
 
 # Standard C++
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+endif()
 
 option(CLAPFFT_LINK_STATIC_FFTW "Link FFTW statically into shared clapfft library" ON)
 
@@ -106,6 +111,33 @@ add_executable(benchmark_c2r_3d_long_double
 target_link_libraries(benchmark_c2r_3d_long_double PRIVATE
     clapfft
     ${FFTW3L_LIBRARIES}
+)
+
+add_executable(benchmark_r2r_3d_float
+    tests/benchmark_r2r_3d_float.cpp
+)
+target_link_libraries(benchmark_r2r_3d_float PRIVATE
+    clapfft
+    ${FFTW3F_LIBRARIES}
+)
+
+add_executable(benchmark_c2c_3d_all_precisions
+    tests/benchmark_c2c_3d_all_precisions.cpp
+)
+target_link_libraries(benchmark_c2c_3d_all_precisions PRIVATE
+    clapfft
+    ${FFTW3F_LIBRARIES}
+    ${FFTW3D_LIBRARIES}
+    ${FFTW3L_LIBRARIES}
+)
+
+add_executable(benchmark_parallel_c2c_1d_threads
+    tests/benchmark_parallel_c2c_1d_threads.cpp
+)
+target_link_libraries(benchmark_parallel_c2c_1d_threads PRIVATE
+    clapfft
+    ${FFTW3D_LIBRARIES}
+    Threads::Threads
 )
 
 
