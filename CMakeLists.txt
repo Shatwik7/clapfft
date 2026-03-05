@@ -91,6 +91,23 @@ foreach(case IN LISTS CLAPFFT_TEST_CASES)
     add_test(NAME ${case}_test COMMAND ${target_name})
 endforeach()
 
+# Performance benchmark: clapfft wrapper vs direct FFTW
+add_executable(benchmark_clapfft_vs_fftw
+    tests/benchmark_clapfft_vs_fftw.cpp
+)
+target_link_libraries(benchmark_clapfft_vs_fftw PRIVATE
+    clapfft
+    ${FFTW3D_LIBRARIES}
+)
+
+add_executable(benchmark_c2r_3d_long_double
+    tests/benchmark_c2r_3d_long_double.cpp
+)
+target_link_libraries(benchmark_c2r_3d_long_double PRIVATE
+    clapfft
+    ${FFTW3L_LIBRARIES}
+)
+
 
 # --- Installation ---
 # This part is for making the library easily reusable in other projects.
