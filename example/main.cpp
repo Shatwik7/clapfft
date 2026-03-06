@@ -1,4 +1,7 @@
 #include <clapfft/advanced_fft.hpp>
+#include <clapfft/clapfft_api.hpp>
+#include <clapfft/wisdom.hpp>
+
 #include <cassert>
 #include <cmath>
 #include <complex>
@@ -140,6 +143,42 @@ void run_many_dft_r2c_3d_test()
     }
 }
 
+template <typename T>
+void run_c2r_3d_with_wisdom_test(std::string fileName)
+{
+    const int n0 = 4;
+    const int n1 = 4;
+    const int n2_real = 8;
+    const int n2_complex = n2_real / 2 + 1;
+    const std::string wisdom_file = fileName;
+
+    // 1. Try to import wisdom if it exists
+    if (clapfft::Wisdom::import_from_filename<T>(wisdom_file))
+    {
+        std::cout << "Wisdom imported from " << wisdom_file << std::endl;
+    }
+    else
+    {
+        std::cout << "No existing wisdom found, will export after planning." << std::endl;
+    }
+
+    // 2. Prepare data
+    std::vector<std::vector<std::vector<std::complex<T>>>> input(
+        n0, std::vector<std::vector<std::complex<T>>>(
+                n1, std::vector<std::complex<T>>(n2_complex, {1.0, 0.0})));
+    std::vector<std::vector<std::vector<T>>> output;
+
+    // 3. Run FFT (this will use wisdom if available, or generate it)
+    clapfft::FFT::c2r_3d<T>(input, output);
+
+    // 4. Export wisdom for future runs
+    clapfft::Wisdom::export_to_filename<T>(wisdom_file);
+    std::cout << "Wisdom exported to " << wisdom_file << std::endl;
+
+    assert(output.size() == static_cast<std::size_t>(n0));
+    assert(output[0][0].size() == static_cast<std::size_t>(n2_real));
+}
+
 int main()
 {
     run_many_dft_r2c_1d_test<float>();
@@ -153,6 +192,11 @@ int main()
     run_many_dft_r2c_3d_test<float>();
     run_many_dft_r2c_3d_test<double>();
     run_many_dft_r2c_3d_test<long double>();
+
+    run_c2r_3d_with_wisdom_test<long double>("c2r_3d_wisdom_1.dat");
+    run_c2r_3d_with_wisdom_test<float>("c2r_3d_wisdom_2.dat");
+    run_c2r_3d_with_wisdom_test<double>("c2r_3d_wisdom_3.dat");
+
     std::cout << "advanced_many_dft_r2c tests passed." << std::endl;
     return 0;
 }

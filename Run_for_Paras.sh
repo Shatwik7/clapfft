@@ -8,7 +8,7 @@ INCLUDE_DIR="${PROJECT_ROOT}/include"
 LIB_DIR="${PROJECT_ROOT}/build"
 
 echo "--- Compiling example/main.cpp ---"
-
+mkdir temp
 # Compile the code
 # -I: Header search path
 # -L: Library search path
@@ -19,7 +19,7 @@ parascc -std=c++17 example/main.cpp \
     -L"${LIB_DIR}" \
     -Wl,-rpath,"${LIB_DIR}" \
     -lclapfft \
-    -o run_for_parass
+    -o temp/run_for_parass
 
 # Check if compilation was successful
 if [ $? -eq 0 ]; then
