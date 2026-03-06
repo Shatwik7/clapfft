@@ -175,6 +175,26 @@ namespace clapfft
             fftwf_execute_r2r(plan, in, out);
         }
 
+        static int import_wisdom_from_filename(const char *filename)
+        {
+            return fftwf_import_wisdom_from_filename(filename);
+        }
+
+        static void export_wisdom_to_filename(const char *filename)
+        {
+            fftwf_export_wisdom_to_filename(filename);
+        }
+
+        static char *export_wisdom_to_string()
+        {
+            return fftwf_export_wisdom_to_string();
+        }
+
+        static int import_wisdom_from_string(const char *input_string)
+        {
+            return fftwf_import_wisdom_from_string(input_string);
+        }
+
         static void destroy_plan(plan_type plan)
         {
             fftwf_destroy_plan(plan);
@@ -646,6 +666,26 @@ namespace clapfft
             fftw_execute_r2r(plan, in, out);
         }
 
+        static int import_wisdom_from_filename(const char *filename)
+        {
+            return fftw_import_wisdom_from_filename(filename);
+        }
+
+        static void export_wisdom_to_filename(const char *filename)
+        {
+            fftw_export_wisdom_to_filename(filename);
+        }
+
+        static char *export_wisdom_to_string()
+        {
+            return fftw_export_wisdom_to_string();
+        }
+
+        static int import_wisdom_from_string(const char *input_string)
+        {
+            return fftw_import_wisdom_from_string(input_string);
+        }
+
         static void destroy_plan(plan_type plan)
         {
             fftw_destroy_plan(plan);
@@ -812,6 +852,26 @@ namespace clapfft
         static void execute_r2r(plan_type plan, long double *in, long double *out)
         {
             fftwl_execute_r2r(plan, in, out);
+        }
+
+        static int import_wisdom_from_filename(const char *filename)
+        {
+            return fftwl_import_wisdom_from_filename(filename);
+        }
+
+        static void export_wisdom_to_filename(const char *filename)
+        {
+            fftwl_export_wisdom_to_filename(filename);
+        }
+
+        static char *export_wisdom_to_string()
+        {
+            return fftwl_export_wisdom_to_string();
+        }
+
+        static int import_wisdom_from_string(const char *input_string)
+        {
+            return fftwl_import_wisdom_from_string(input_string);
         }
 
         static void destroy_plan(plan_type plan)

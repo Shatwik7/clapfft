@@ -33,6 +33,7 @@ add_library(clapfft SHARED
     src/clapfft_api.cpp
     src/advanced_fft.cpp
     src/guru_fft.cpp
+    src/wisdom.cpp
 )
 
 set_target_properties(clapfft PROPERTIES
@@ -85,6 +86,7 @@ set(CLAPFFT_TEST_CASES
     advanced_many_dft_c2r
     advanced_many_r2r
     advanced_guru
+    wisdom
 )
 
 foreach(case IN LISTS CLAPFFT_TEST_CASES)
