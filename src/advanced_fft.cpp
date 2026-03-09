@@ -1,6 +1,6 @@
 #include <clapfft/advanced_fft.hpp>
-#include <clapfft/fft_traits.hpp>
 #include <fftw3.h>
+#include <clapfft/fft_traits.hpp>
 #include <mutex>
 
 namespace clapfft
@@ -17,7 +17,8 @@ namespace clapfft
                                int istride, int idist,
                                std::complex<T> *out, const int *onembed,
                                int ostride, int odist,
-                               int sign)
+                               int sign,
+                               fft_flags flags)
     {
         if (rank <= 0 || n == nullptr || in == nullptr || out == nullptr || howmany <= 0)
         {
@@ -34,7 +35,7 @@ namespace clapfft
             plan = traits::plan_many_dft(rank, n, howmany,
                                          in_ptr, inembed, istride, idist,
                                          out_ptr, onembed, ostride, odist,
-                                         sign, FFTW_ESTIMATE);
+                                         sign, flags);
         }
 
         if (plan == nullptr)
@@ -51,7 +52,8 @@ namespace clapfft
                                    T *in, const int *inembed,
                                    int istride, int idist,
                                    std::complex<T> *out, const int *onembed,
-                                   int ostride, int odist)
+                                   int ostride, int odist,
+                                   fft_flags flags)
     {
         if (rank <= 0 || n == nullptr || in == nullptr || out == nullptr || howmany <= 0)
         {
@@ -67,7 +69,7 @@ namespace clapfft
             plan = traits::plan_many_dft_r2c(rank, n, howmany,
                                              in, inembed, istride, idist,
                                              out_ptr, onembed, ostride, odist,
-                                             FFTW_ESTIMATE);
+                                             flags);
         }
 
         if (plan == nullptr)
@@ -84,7 +86,8 @@ namespace clapfft
                                    std::complex<T> *in, const int *inembed,
                                    int istride, int idist,
                                    T *out, const int *onembed,
-                                   int ostride, int odist)
+                                   int ostride, int odist,
+                                   fft_flags flags)
     {
         if (rank <= 0 || n == nullptr || in == nullptr || out == nullptr || howmany <= 0)
         {
@@ -100,7 +103,7 @@ namespace clapfft
             plan = traits::plan_many_dft_c2r(rank, n, howmany,
                                              in_ptr, inembed, istride, idist,
                                              out, onembed, ostride, odist,
-                                             FFTW_ESTIMATE);
+                                             flags);
         }
 
         if (plan == nullptr)
@@ -118,7 +121,8 @@ namespace clapfft
                                int istride, int idist,
                                T *out, const int *onembed,
                                int ostride, int odist,
-                               const int *kind)
+                               const int *kind,
+                               fft_flags flags)
     {
         if (rank <= 0 || n == nullptr || in == nullptr || out == nullptr || kind == nullptr || howmany <= 0)
         {
@@ -133,7 +137,7 @@ namespace clapfft
             plan = traits::plan_many_r2r(rank, n, howmany,
                                          in, inembed, istride, idist,
                                          out, onembed, ostride, odist,
-                                         kind, FFTW_ESTIMATE);
+                                         reinterpret_cast<const fftw_r2r_kind*>(kind), flags);
         }
 
         if (plan == nullptr)
@@ -150,69 +154,69 @@ namespace clapfft
                                                int, int,
                                                std::complex<float> *, const int *,
                                                int, int,
-                                               int);
+                                               int, fft_flags);
     template void AdvancedFFT::many_dft<double>(int, const int *, int,
                                                 std::complex<double> *, const int *,
                                                 int, int,
                                                 std::complex<double> *, const int *,
                                                 int, int,
-                                                int);
+                                                int, fft_flags);
     template void AdvancedFFT::many_dft<long double>(int, const int *, int,
                                                      std::complex<long double> *, const int *,
                                                      int, int,
                                                      std::complex<long double> *, const int *,
                                                      int, int,
-                                                     int);
+                                                     int, fft_flags);
 
     template void AdvancedFFT::many_dft_r2c<float>(int, const int *, int,
                                                    float *, const int *,
                                                    int, int,
                                                    std::complex<float> *, const int *,
-                                                   int, int);
+                                                   int, int, fft_flags);
     template void AdvancedFFT::many_dft_r2c<double>(int, const int *, int,
                                                     double *, const int *,
                                                     int, int,
                                                     std::complex<double> *, const int *,
-                                                    int, int);
+                                                    int, int, fft_flags);
     template void AdvancedFFT::many_dft_r2c<long double>(int, const int *, int,
                                                          long double *, const int *,
                                                          int, int,
                                                          std::complex<long double> *, const int *,
-                                                         int, int);
+                                                         int, int, fft_flags);
 
     template void AdvancedFFT::many_dft_c2r<float>(int, const int *, int,
                                                    std::complex<float> *, const int *,
                                                    int, int,
                                                    float *, const int *,
-                                                   int, int);
+                                                   int, int, fft_flags);
     template void AdvancedFFT::many_dft_c2r<double>(int, const int *, int,
                                                     std::complex<double> *, const int *,
                                                     int, int,
                                                     double *, const int *,
-                                                    int, int);
+                                                    int, int, fft_flags);
     template void AdvancedFFT::many_dft_c2r<long double>(int, const int *, int,
                                                          std::complex<long double> *, const int *,
                                                          int, int,
                                                          long double *, const int *,
-                                                         int, int);
+                                                         int, int, fft_flags);
 
     template void AdvancedFFT::many_r2r<float>(int, const int *, int,
                                                float *, const int *,
                                                int, int,
                                                float *, const int *,
                                                int, int,
-                                               const int *);
+                                               const int *, fft_flags);
     template void AdvancedFFT::many_r2r<double>(int, const int *, int,
                                                 double *, const int *,
                                                 int, int,
                                                 double *, const int *,
                                                 int, int,
-                                                const int *);
+                                                const int *, fft_flags);
     template void AdvancedFFT::many_r2r<long double>(int, const int *, int,
                                                      long double *, const int *,
                                                      int, int,
                                                      long double *, const int *,
                                                      int, int,
-                                                     const int *);
+                                                     const int *, fft_flags);
 
 } // namespace clapfft

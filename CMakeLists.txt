@@ -32,6 +32,8 @@ include_directories(${FFTW3L_INCLUDE_DIRS})
 add_library(clapfft SHARED
     src/clapfft_api.cpp
     src/advanced_fft.cpp
+    src/fft_flags.cpp
+    src/fft_traits_impl.cpp
     src/guru_fft.cpp
     src/wisdom.cpp
 )

@@ -1,6 +1,7 @@
+#include <fftw3.h>
 #include <clapfft/clapfft_api.hpp>
-#include <clapfft/wisdom.hpp>
 #include <clapfft/fft_plan_cache.hpp>
+#include <clapfft/wisdom.hpp>
 #include <fftw3.h>
 #include <iostream>
 #include <vector>
@@ -107,11 +108,31 @@ void test_wisdom_c2c_2d_long_double()
     std::cout << "Successfully verified c2c_2d long double wisdom cycle." << std::endl;
 }
 
+void test_flag_sensitive_plan_cache()
+{
+    std::cout << "Testing plan cache flag sensitivity..." << std::endl;
+    using wrapper_t = clapfft::PlanCache<double>::Wrapper;
+    auto w1 = clapfft::PlanCache<double>::get_c2c_1d(16, FFTW_FORWARD, clapfft::CLAP_FFT_ESTIMATE);
+    auto w2 = clapfft::PlanCache<double>::get_c2c_1d(16, FFTW_FORWARD, clapfft::CLAP_FFT_ESTIMATE);
+    if (w1 != w2) {
+        std::cerr << "Cache failed to return same wrapper for identical flags." << std::endl;
+        exit(1);
+    }
+    auto w3 = clapfft::PlanCache<double>::get_c2c_1d(16, FFTW_FORWARD, clapfft::CLAP_FFT_MEASURE);
+    if (w3 == w1) {
+        std::cerr << "Cache did not distinguish between different planning flags." << std::endl;
+        exit(1);
+    }
+    std::cout << "Flag sensitivity test passed." << std::endl;
+}
+
 int main()
 {
     test_wisdom_string();
     test_wisdom_file();
     test_wisdom_c2c_2d_long_double();
+    test_flag_sensitive_plan_cache();
     std::cout << "All wisdom tests passed!" << std::endl;
     return 0;
 }
+

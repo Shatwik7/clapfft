@@ -1,5 +1,6 @@
 #pragma once
 #include <clapfft/fft_traits.hpp>
+#include "fft_flags.hpp" // planning flag definitions
 #include <unordered_map>
 #include <memory>
 #include <mutex>
@@ -10,6 +11,20 @@
 namespace clapfft
 {
 
+    enum R2RKind
+    {
+        FFT_R2HC = 0,
+        FFT_HC2R = 1,
+        FFT_DHT = 2,
+        FFT_REDFT00 = 3,
+        FFT_REDFT01 = 4,
+        FFT_REDFT10 = 5,
+        FFT_REDFT11 = 6,
+        FFT_RODFT00 = 7,
+        FFT_RODFT01 = 8,
+        FFT_RODFT10 = 9,
+        FFT_RODFT11 = 10
+    };
     enum class TransformKind
     {
         C2C,
@@ -25,11 +40,13 @@ namespace clapfft
         int n0, n1, n2;
         int sign;
         int k0, k1, k2;
+        fft_flags flags; // planning options (measure/estimate/etc.)
 
         bool operator==(const PlanKey &o) const
         {
             return kind == o.kind && dim == o.dim && n0 == o.n0 && n1 == o.n1 &&
-                   n2 == o.n2 && sign == o.sign && k0 == o.k0 && k1 == o.k1 && k2 == o.k2;
+                   n2 == o.n2 && sign == o.sign && k0 == o.k0 && k1 == o.k1 && k2 == o.k2 &&
+                   flags == o.flags;
         }
     };
 
@@ -46,6 +63,7 @@ namespace clapfft
             h ^= std::hash<int>()(k.k0) << 6;
             h ^= std::hash<int>()(k.k1) << 7;
             h ^= std::hash<int>()(k.k2) << 8;
+            h ^= std::hash<fft_flags>()(k.flags) << 9;
             return h;
         }
     };
@@ -119,142 +137,154 @@ namespace clapfft
         static std::mutex planner_mutex;
 
     public:
-        static std::shared_ptr<Wrapper> get_c2c_1d(int n, int sign)
+        static std::shared_ptr<Wrapper> get_c2c_1d(int n, int sign,
+                                                   fft_flags flags = CLAP_FFT_ESTIMATE)
         {
-            PlanKey key{TransformKind::C2C, 1, n, 1, 1, sign, 0, 0, 0};
-            return get_or_create(key, [n, sign]()
+            PlanKey key{TransformKind::C2C, 1, n, 1, 1, sign, 0, 0, 0, flags};
+            return get_or_create(key, [n, sign, flags]()
                                  {
             std::vector<std::complex<T>> dummy_in(static_cast<std::size_t>(n));
             std::vector<std::complex<T>> dummy_out(static_cast<std::size_t>(n));
             auto in_ptr = reinterpret_cast<typename traits::complex_type*>(dummy_in.data());
             auto out_ptr = reinterpret_cast<typename traits::complex_type*>(dummy_out.data());
-            return traits::plan_dft_1d(n, in_ptr, out_ptr, sign, FFTW_MEASURE | FFTW_UNALIGNED); });
+            return traits::plan_dft_1d(n, in_ptr, out_ptr, sign, flags | CLAP_FFT_UNALIGNED); });
         }
 
-        static std::shared_ptr<Wrapper> get_c2c_2d(int n0, int n1, int sign)
+        static std::shared_ptr<Wrapper> get_c2c_2d(int n0, int n1, int sign,
+                                                   fft_flags flags = CLAP_FFT_ESTIMATE)
         {
-            PlanKey key{TransformKind::C2C, 2, n0, n1, 1, sign, 0, 0, 0};
-            return get_or_create(key, [n0, n1, sign]()
+            PlanKey key{TransformKind::C2C, 2, n0, n1, 1, sign, 0, 0, 0, flags};
+            return get_or_create(key, [n0, n1, sign, flags]()
                                  {
             std::vector<std::complex<T>> dummy_in(element_count(2, n0, n1, 1));
             std::vector<std::complex<T>> dummy_out(element_count(2, n0, n1, 1));
             auto in_ptr = reinterpret_cast<typename traits::complex_type*>(dummy_in.data());
             auto out_ptr = reinterpret_cast<typename traits::complex_type*>(dummy_out.data());
-            return traits::plan_dft_2d(n0, n1, in_ptr, out_ptr, sign, FFTW_MEASURE | FFTW_UNALIGNED); });
+            return traits::plan_dft_2d(n0, n1, in_ptr, out_ptr, sign, flags | CLAP_FFT_UNALIGNED); });
         }
 
-        static std::shared_ptr<Wrapper> get_c2c_3d(int n0, int n1, int n2, int sign)
+        static std::shared_ptr<Wrapper> get_c2c_3d(int n0, int n1, int n2, int sign,
+                                                   fft_flags flags = CLAP_FFT_ESTIMATE)
         {
-            PlanKey key{TransformKind::C2C, 3, n0, n1, n2, sign, 0, 0, 0};
-            return get_or_create(key, [n0, n1, n2, sign]()
+            PlanKey key{TransformKind::C2C, 3, n0, n1, n2, sign, 0, 0, 0, flags};
+            return get_or_create(key, [n0, n1, n2, sign, flags]()
                                  {
             std::vector<std::complex<T>> dummy_in(element_count(3, n0, n1, n2));
             std::vector<std::complex<T>> dummy_out(element_count(3, n0, n1, n2));
             auto in_ptr = reinterpret_cast<typename traits::complex_type*>(dummy_in.data());
             auto out_ptr = reinterpret_cast<typename traits::complex_type*>(dummy_out.data());
-            return traits::plan_dft_3d(n0, n1, n2, in_ptr, out_ptr, sign, FFTW_MEASURE | FFTW_UNALIGNED); });
+            return traits::plan_dft_3d(n0, n1, n2, in_ptr, out_ptr, sign, flags | CLAP_FFT_UNALIGNED); });
         }
 
-        static std::shared_ptr<Wrapper> get_r2c_1d(int n)
+        static std::shared_ptr<Wrapper> get_r2c_1d(int n,
+                                                   fft_flags flags = CLAP_FFT_ESTIMATE)
         {
-            PlanKey key{TransformKind::R2C, 1, n, 1, 1, 0, 0, 0, 0};
-            return get_or_create(key, [n]()
+            PlanKey key{TransformKind::R2C, 1, n, 1, 1, 0, 0, 0, 0, flags};
+            return get_or_create(key, [n, flags]()
                                  {
             std::vector<T> real_dummy(static_cast<std::size_t>(n));
             std::vector<std::complex<T>> complex_dummy(static_cast<std::size_t>(n / 2 + 1));
             auto in_ptr = real_dummy.data();
             auto out_ptr = reinterpret_cast<typename traits::complex_type*>(complex_dummy.data());
-            return traits::plan_dft_r2c_1d(n, in_ptr, out_ptr, FFTW_MEASURE | FFTW_UNALIGNED); });
+            return traits::plan_dft_r2c_1d(n, in_ptr, out_ptr, flags | CLAP_FFT_UNALIGNED); });
         }
 
-        static std::shared_ptr<Wrapper> get_r2c_2d(int n0, int n1)
+        static std::shared_ptr<Wrapper> get_r2c_2d(int n0, int n1,
+                                                   fft_flags flags = CLAP_FFT_ESTIMATE)
         {
-            PlanKey key{TransformKind::R2C, 2, n0, n1, 1, 0, 0, 0, 0};
-            return get_or_create(key, [n0, n1]()
+            PlanKey key{TransformKind::R2C, 2, n0, n1, 1, 0, 0, 0, 0, flags};
+            return get_or_create(key, [n0, n1, flags]()
                                  {
             std::vector<T> real_dummy(element_count(2, n0, n1, 1));
             std::vector<std::complex<T>> complex_dummy(static_cast<std::size_t>(n0) * static_cast<std::size_t>(n1 / 2 + 1));
             auto in_ptr = real_dummy.data();
             auto out_ptr = reinterpret_cast<typename traits::complex_type*>(complex_dummy.data());
-            return traits::plan_dft_r2c_2d(n0, n1, in_ptr, out_ptr, FFTW_MEASURE | FFTW_UNALIGNED); });
+            return traits::plan_dft_r2c_2d(n0, n1, in_ptr, out_ptr, flags | CLAP_FFT_UNALIGNED); });
         }
 
-        static std::shared_ptr<Wrapper> get_r2c_3d(int n0, int n1, int n2)
+        static std::shared_ptr<Wrapper> get_r2c_3d(int n0, int n1, int n2,
+                                                   fft_flags flags = CLAP_FFT_ESTIMATE)
         {
-            PlanKey key{TransformKind::R2C, 3, n0, n1, n2, 0, 0, 0, 0};
-            return get_or_create(key, [n0, n1, n2]()
+            PlanKey key{TransformKind::R2C, 3, n0, n1, n2, 0, 0, 0, 0, flags};
+            return get_or_create(key, [n0, n1, n2, flags]()
                                  {
             std::vector<T> real_dummy(element_count(3, n0, n1, n2));
             std::vector<std::complex<T>> complex_dummy(static_cast<std::size_t>(n0) * static_cast<std::size_t>(n1) * static_cast<std::size_t>(n2 / 2 + 1));
             auto in_ptr = real_dummy.data();
             auto out_ptr = reinterpret_cast<typename traits::complex_type*>(complex_dummy.data());
-            return traits::plan_dft_r2c_3d(n0, n1, n2, in_ptr, out_ptr, FFTW_MEASURE | FFTW_UNALIGNED); });
+            return traits::plan_dft_r2c_3d(n0, n1, n2, in_ptr, out_ptr, flags | CLAP_FFT_UNALIGNED); });
         }
 
-        static std::shared_ptr<Wrapper> get_c2r_1d(int n)
+        static std::shared_ptr<Wrapper> get_c2r_1d(int n,
+                                                   fft_flags flags = CLAP_FFT_ESTIMATE)
         {
-            PlanKey key{TransformKind::C2R, 1, n, 1, 1, 0, 0, 0, 0};
-            return get_or_create(key, [n]()
+            PlanKey key{TransformKind::C2R, 1, n, 1, 1, 0, 0, 0, 0, flags};
+            return get_or_create(key, [n, flags]()
                                  {
             std::vector<std::complex<T>> complex_dummy(static_cast<std::size_t>(n / 2 + 1));
             std::vector<T> real_dummy(static_cast<std::size_t>(n));
             auto in_ptr = reinterpret_cast<typename traits::complex_type*>(complex_dummy.data());
             auto out_ptr = real_dummy.data();
-            return traits::plan_dft_c2r_1d(n, in_ptr, out_ptr, FFTW_MEASURE | FFTW_UNALIGNED); });
+            return traits::plan_dft_c2r_1d(n, in_ptr, out_ptr, flags | CLAP_FFT_UNALIGNED); });
         }
 
-        static std::shared_ptr<Wrapper> get_c2r_2d(int n0, int n1)
+        static std::shared_ptr<Wrapper> get_c2r_2d(int n0, int n1,
+                                                   fft_flags flags = CLAP_FFT_ESTIMATE)
         {
-            PlanKey key{TransformKind::C2R, 2, n0, n1, 1, 0, 0, 0, 0};
-            return get_or_create(key, [n0, n1]()
+            PlanKey key{TransformKind::C2R, 2, n0, n1, 1, 0, 0, 0, 0, flags};
+            return get_or_create(key, [n0, n1, flags]()
                                  {
             std::vector<std::complex<T>> complex_dummy(static_cast<std::size_t>(n0) * static_cast<std::size_t>(n1 / 2 + 1));
             std::vector<T> real_dummy(element_count(2, n0, n1, 1));
             auto in_ptr = reinterpret_cast<typename traits::complex_type*>(complex_dummy.data());
             auto out_ptr = real_dummy.data();
-            return traits::plan_dft_c2r_2d(n0, n1, in_ptr, out_ptr, FFTW_MEASURE | FFTW_UNALIGNED); });
+            return traits::plan_dft_c2r_2d(n0, n1, in_ptr, out_ptr, flags | CLAP_FFT_UNALIGNED); });
         }
 
-        static std::shared_ptr<Wrapper> get_c2r_3d(int n0, int n1, int n2)
+        static std::shared_ptr<Wrapper> get_c2r_3d(int n0, int n1, int n2,
+                                                   fft_flags flags = CLAP_FFT_ESTIMATE)
         {
-            PlanKey key{TransformKind::C2R, 3, n0, n1, n2, 0, 0, 0, 0};
-            return get_or_create(key, [n0, n1, n2]()
+            PlanKey key{TransformKind::C2R, 3, n0, n1, n2, 0, 0, 0, 0, flags};
+            return get_or_create(key, [n0, n1, n2, flags]()
                                  {
             std::vector<std::complex<T>> complex_dummy(static_cast<std::size_t>(n0) * static_cast<std::size_t>(n1) * static_cast<std::size_t>(n2 / 2 + 1));
             std::vector<T> real_dummy(element_count(3, n0, n1, n2));
             auto in_ptr = reinterpret_cast<typename traits::complex_type*>(complex_dummy.data());
             auto out_ptr = real_dummy.data();
-            return traits::plan_dft_c2r_3d(n0, n1, n2, in_ptr, out_ptr, FFTW_MEASURE | FFTW_UNALIGNED); });
+            return traits::plan_dft_c2r_3d(n0, n1, n2, in_ptr, out_ptr, flags | CLAP_FFT_UNALIGNED); });
         }
 
-        static std::shared_ptr<Wrapper> get_r2r_1d(int n, int kind)
+        static std::shared_ptr<Wrapper> get_r2r_1d(int n, fftw_r2r_kind kind,
+                                                   fft_flags flags = CLAP_FFT_ESTIMATE)
         {
-            PlanKey key{TransformKind::R2R, 1, n, 1, 1, 0, kind, 0, 0};
-            return get_or_create(key, [n, kind]()
+            PlanKey key{TransformKind::R2R, 1, n, 1, 1, 0, static_cast<int>(kind), 0, 0, flags};
+            return get_or_create(key, [n, kind, flags]()
                                  {
             std::vector<T> real_dummy_in(static_cast<std::size_t>(n));
             std::vector<T> real_dummy_out(static_cast<std::size_t>(n));
-            return traits::plan_r2r_1d(n, real_dummy_in.data(), real_dummy_out.data(), kind, FFTW_MEASURE | FFTW_UNALIGNED); });
+            return traits::plan_r2r_1d(n, real_dummy_in.data(), real_dummy_out.data(), kind, flags | CLAP_FFT_UNALIGNED); });
         }
 
-        static std::shared_ptr<Wrapper> get_r2r_2d(int n0, int n1, int kind0, int kind1)
+        static std::shared_ptr<Wrapper> get_r2r_2d(int n0, int n1, fftw_r2r_kind kind0, fftw_r2r_kind kind1,
+                                                   fft_flags flags = CLAP_FFT_ESTIMATE)
         {
-            PlanKey key{TransformKind::R2R, 2, n0, n1, 1, 0, kind0, kind1, 0};
-            return get_or_create(key, [n0, n1, kind0, kind1]()
+            PlanKey key{TransformKind::R2R, 2, n0, n1, 1, 0, static_cast<int>(kind0), static_cast<int>(kind1), 0, flags};
+            return get_or_create(key, [n0, n1, kind0, kind1, flags]()
                                  {
             std::vector<T> real_dummy_in(element_count(2, n0, n1, 1));
             std::vector<T> real_dummy_out(element_count(2, n0, n1, 1));
-            return traits::plan_r2r_2d(n0, n1, real_dummy_in.data(), real_dummy_out.data(), kind0, kind1, FFTW_MEASURE | FFTW_UNALIGNED); });
+            return traits::plan_r2r_2d(n0, n1, real_dummy_in.data(), real_dummy_out.data(), kind0, kind1, flags | CLAP_FFT_UNALIGNED); });
         }
 
-        static std::shared_ptr<Wrapper> get_r2r_3d(int n0, int n1, int n2, int kind0, int kind1, int kind2)
+        static std::shared_ptr<Wrapper> get_r2r_3d(int n0, int n1, int n2, fftw_r2r_kind kind0, fftw_r2r_kind kind1, fftw_r2r_kind kind2,
+                                                   fft_flags flags = CLAP_FFT_ESTIMATE)
         {
-            PlanKey key{TransformKind::R2R, 3, n0, n1, n2, 0, kind0, kind1, kind2};
-            return get_or_create(key, [n0, n1, n2, kind0, kind1, kind2]()
+            PlanKey key{TransformKind::R2R, 3, n0, n1, n2, 0, static_cast<int>(kind0), static_cast<int>(kind1), static_cast<int>(kind2), flags};
+            return get_or_create(key, [n0, n1, n2, kind0, kind1, kind2, flags]()
                                  {
             std::vector<T> real_dummy_in(element_count(3, n0, n1, n2));
             std::vector<T> real_dummy_out(element_count(3, n0, n1, n2));
-            return traits::plan_r2r_3d(n0, n1, n2, real_dummy_in.data(), real_dummy_out.data(), kind0, kind1, kind2, FFTW_MEASURE | FFTW_UNALIGNED); });
+            return traits::plan_r2r_3d(n0, n1, n2, real_dummy_in.data(), real_dummy_out.data(), kind0, kind1, kind2, flags | CLAP_FFT_UNALIGNED); });
         }
 
         static void cleanup()

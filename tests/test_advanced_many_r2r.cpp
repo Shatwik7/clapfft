@@ -1,9 +1,11 @@
-#include <clapfft/advanced_fft.hpp>
-#include <fftw3.h>
 #include <cassert>
 #include <cmath>
 #include <iostream>
 #include <vector>
+#include <clapfft/clapfft_api.hpp>
+#include <clapfft/advanced_fft.hpp>
+#include <clapfft/fft_flags.hpp>
+#include <clapfft/fft_plan_cache.hpp>
 
 template <typename T>
 void run_many_r2r_1d_test()
@@ -24,8 +26,8 @@ void run_many_r2r_1d_test()
     std::vector<T> forward(static_cast<std::size_t>(n * howmany));
     std::vector<T> recovered(static_cast<std::size_t>(n * howmany));
     int dims[1] = {n};
-    int kind_fwd[1] = {FFTW_REDFT10};
-    int kind_inv[1] = {FFTW_REDFT01};
+    int kind_fwd[1] = {clapfft::R2RKind::FFT_REDFT10};
+    int kind_inv[1] = {clapfft::R2RKind::FFT_REDFT01};
 
     clapfft::AdvancedFFT::many_r2r<T>(1, dims, howmany,
                                       input.data(), nullptr,
@@ -33,6 +35,14 @@ void run_many_r2r_1d_test()
                                       forward.data(), nullptr,
                                       1, n,
                                       kind_fwd);
+    // explicit flags
+    clapfft::AdvancedFFT::many_r2r<T>(1, dims, howmany,
+                                      input.data(), nullptr,
+                                      1, n,
+                                      forward.data(), nullptr,
+                                      1, n,
+                                      kind_fwd,
+                                      clapfft::CLAP_FFT_MEASURE);
 
     clapfft::AdvancedFFT::many_r2r<T>(1, dims, howmany,
                                       forward.data(), nullptr,
@@ -40,6 +50,13 @@ void run_many_r2r_1d_test()
                                       recovered.data(), nullptr,
                                       1, n,
                                       kind_inv);
+    clapfft::AdvancedFFT::many_r2r<T>(1, dims, howmany,
+                                      forward.data(), nullptr,
+                                      1, n,
+                                      recovered.data(), nullptr,
+                                      1, n,
+                                      kind_inv,
+                                      clapfft::CLAP_FFT_MEASURE);
 
     const T scale = static_cast<T>(2 * n);
     for (std::size_t i = 0; i < recovered.size(); ++i)
@@ -73,8 +90,8 @@ void run_many_r2r_2d_test()
     std::vector<T> forward(static_cast<std::size_t>(points * howmany));
     std::vector<T> recovered(static_cast<std::size_t>(points * howmany));
     int dims[2] = {n0, n1};
-    int kind_fwd[2] = {FFTW_REDFT10, FFTW_REDFT10};
-    int kind_inv[2] = {FFTW_REDFT01, FFTW_REDFT01};
+    int kind_fwd[2] = {clapfft::R2RKind::FFT_REDFT10, clapfft::R2RKind::FFT_REDFT10};
+    int kind_inv[2] = {clapfft::R2RKind::FFT_REDFT01, clapfft::R2RKind::FFT_REDFT01};
 
     clapfft::AdvancedFFT::many_r2r<T>(2, dims, howmany,
                                       input.data(), nullptr,
@@ -126,8 +143,8 @@ void run_many_r2r_3d_test()
     std::vector<T> forward(static_cast<std::size_t>(points * howmany));
     std::vector<T> recovered(static_cast<std::size_t>(points * howmany));
     int dims[3] = {n0, n1, n2};
-    int kind_fwd[3] = {FFTW_REDFT10, FFTW_REDFT10, FFTW_REDFT10};
-    int kind_inv[3] = {FFTW_REDFT01, FFTW_REDFT01, FFTW_REDFT01};
+    int kind_fwd[3] = {clapfft::R2RKind::FFT_REDFT10, clapfft::R2RKind::FFT_REDFT10, clapfft::R2RKind::FFT_REDFT10};
+    int kind_inv[3] = {clapfft::R2RKind::FFT_REDFT01, clapfft::R2RKind::FFT_REDFT01, clapfft::R2RKind::FFT_REDFT01};
 
     clapfft::AdvancedFFT::many_r2r<T>(3, dims, howmany,
                                       input.data(), nullptr,

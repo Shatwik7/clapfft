@@ -1,3 +1,4 @@
+#include <fftw3.h>
 #include <clapfft/wisdom.hpp>
 #include <clapfft/fft_traits.hpp>
 #include <cstdlib>

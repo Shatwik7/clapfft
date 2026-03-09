@@ -33,6 +33,6 @@ echo "--- Library installation complete! ---"
 echo "You can find the compiled library and headers in the './$INSTALL_DIR' directory."
 echo "To use it in another CMake project, add the following to your CMakeLists.txt:"
 echo ""
-echo '    find_package(clapfft REQUIRED HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../clfft/'$INSTALL_DIR'/lib/cmake/clapfft")'
+echo '    find_package(clapfft REQUIRED HINTS "{$CMAKE_CURRENT_SOURCE_DIR}/../clfft/'$INSTALL_DIR'/lib/cmake/clapfft")'
 echo '    target_link_libraries(your_target_name PRIVATE clapfft::clapfft)'
 echo ""

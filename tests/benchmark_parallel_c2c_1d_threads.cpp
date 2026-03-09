@@ -1,5 +1,5 @@
-#include <clapfft/clapfft_api.hpp>
 #include <fftw3.h>
+#include <clapfft/clapfft_api.hpp>
 
 #include <algorithm>
 #include <chrono>

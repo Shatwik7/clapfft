@@ -1,4 +1,4 @@
-#include <clapfft/advanced_fft.hpp>
+#include <clapfft/clapfft_api.hpp>
 #include <cassert>
 #include <cmath>
 #include <complex>
@@ -31,12 +31,26 @@ void run_many_dft_c2r_1d_test()
                                           1, n,
                                           spectrum.data(), nullptr,
                                           1, n_complex);
+    // explicit flags version of the forward transform
+    clapfft::AdvancedFFT::many_dft_r2c<T>(1, dims, howmany,
+                                          input.data(), nullptr,
+                                          1, n,
+                                          spectrum.data(), nullptr,
+                                          1, n_complex,
+                                          clapfft::CLAP_FFT_MEASURE);
 
     clapfft::AdvancedFFT::many_dft_c2r<T>(1, dims, howmany,
                                           spectrum.data(), nullptr,
                                           1, n_complex,
                                           recovered.data(), nullptr,
                                           1, n);
+    // explicit flags for the backward transform
+    clapfft::AdvancedFFT::many_dft_c2r<T>(1, dims, howmany,
+                                          spectrum.data(), nullptr,
+                                          1, n_complex,
+                                          recovered.data(), nullptr,
+                                          1, n,
+                                          clapfft::CLAP_FFT_MEASURE);
 
     for (std::size_t i = 0; i < recovered.size(); ++i)
     {

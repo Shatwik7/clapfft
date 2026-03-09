@@ -1,5 +1,4 @@
-#include <clapfft/advanced_fft.hpp>
-#include <fftw3.h>
+#include <clapfft/clapfft_api.hpp>
 #include <cassert>
 #include <cmath>
 #include <complex>
@@ -32,14 +31,30 @@ void run_many_dft_1d_test()
                                       1, n,
                                       forward.data(), nullptr,
                                       1, n,
-                                      FFTW_FORWARD);
+                                      1);
 
     clapfft::AdvancedFFT::many_dft<T>(1, dims, howmany,
                                       forward.data(), nullptr,
                                       1, n,
                                       recovered.data(), nullptr,
                                       1, n,
-                                      FFTW_BACKWARD);
+                                      -1);
+
+    // repeat using explicit planning flags to ensure parameter works
+    clapfft::AdvancedFFT::many_dft<T>(1, dims, howmany,
+                                      input.data(), nullptr,
+                                      1, n,
+                                      forward.data(), nullptr,
+                                      1, n,
+                                      1,
+                                      clapfft::CLAP_FFT_MEASURE);
+    clapfft::AdvancedFFT::many_dft<T>(1, dims, howmany,
+                                      forward.data(), nullptr,
+                                      1, n,
+                                      recovered.data(), nullptr,
+                                      1, n,
+                                      -1,
+                                      clapfft::CLAP_FFT_MEASURE);
 
     for (std::size_t i = 0; i < recovered.size(); ++i)
     {
@@ -80,14 +95,14 @@ void run_many_dft_2d_test()
                                       1, points_per_transform,
                                       forward.data(), nullptr,
                                       1, points_per_transform,
-                                      FFTW_FORWARD);
+                                      1);
 
     clapfft::AdvancedFFT::many_dft<T>(2, dims, howmany,
                                       forward.data(), nullptr,
                                       1, points_per_transform,
                                       recovered.data(), nullptr,
                                       1, points_per_transform,
-                                      FFTW_BACKWARD);
+                                      -1);
 
     for (std::size_t i = 0; i < recovered.size(); ++i)
     {
@@ -132,14 +147,14 @@ void run_many_dft_3d_test()
                                       1, points_per_transform,
                                       forward.data(), nullptr,
                                       1, points_per_transform,
-                                      FFTW_FORWARD);
+                                      1);
 
     clapfft::AdvancedFFT::many_dft<T>(3, dims, howmany,
                                       forward.data(), nullptr,
                                       1, points_per_transform,
                                       recovered.data(), nullptr,
                                       1, points_per_transform,
-                                      FFTW_BACKWARD);
+                                      -1);
 
     for (std::size_t i = 0; i < recovered.size(); ++i)
     {

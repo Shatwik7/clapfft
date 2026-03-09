@@ -1,4 +1,4 @@
-#include <clapfft/advanced_fft.hpp>
+#include <clapfft/clapfft_api.hpp>
 #include <cassert>
 #include <cmath>
 #include <complex>
@@ -30,6 +30,13 @@ void run_many_dft_r2c_1d_test()
                                           1, n,
                                           output.data(), nullptr,
                                           1, n_complex);
+    // explicit flags
+    clapfft::AdvancedFFT::many_dft_r2c<T>(1, dims, howmany,
+                                          input.data(), nullptr,
+                                          1, n,
+                                          output.data(), nullptr,
+                                          1, n_complex,
+                                          clapfft::CLAP_FFT_MEASURE);
 
     for (int b = 0; b < howmany; ++b)
     {

@@ -1,7 +1,7 @@
-#include <fftw3.h>
 #include <cassert>
 #include <cmath>
 #include <complex>
+#include <fftw3.h>
 #include <iostream>
 #include <vector>
 

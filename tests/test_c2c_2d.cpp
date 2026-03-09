@@ -1,5 +1,5 @@
-#include <clapfft/clapfft_api.hpp>
 #include <fftw3.h>
+#include <clapfft/clapfft_api.hpp>
 #include <cassert>
 #include <cmath>
 #include <complex>
@@ -21,8 +21,13 @@ void run_c2c_2d_test()
 
     std::vector<std::vector<std::complex<T>>> spectrum;
     std::vector<std::vector<std::complex<T>>> recovered;
+    // default flags (estimate)
     clapfft::FFT::c2c_2d(input, spectrum, FFTW_FORWARD);
     clapfft::FFT::c2c_2d(spectrum, recovered, FFTW_BACKWARD);
+
+    // repeat with explicit measure to ensure interface works and cache key differs
+    clapfft::FFT::c2c_2d(input, spectrum, FFTW_FORWARD, clapfft::CLAP_FFT_MEASURE);
+    clapfft::FFT::c2c_2d(spectrum, recovered, FFTW_BACKWARD, clapfft::CLAP_FFT_MEASURE);
 
     for (int i = 0; i < n0; ++i) {
         for (int j = 0; j < n1; ++j) {
