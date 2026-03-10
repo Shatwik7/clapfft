@@ -18,8 +18,8 @@ void run_c2c_1d_test()
 
     std::vector<std::complex<T>> spectrum;
     std::vector<std::complex<T>> recovered;
-    clapfft::FFT::c2c_1d(input, spectrum, FFTW_FORWARD);
-    clapfft::FFT::c2c_1d(spectrum, recovered, FFTW_BACKWARD);
+    clapfft::FFT::c2c_1d(input, spectrum, FFTW_FORWARD, clapfft::CLAP_FFT_MEASURE);
+    clapfft::FFT::c2c_1d(spectrum, recovered, FFTW_BACKWARD, clapfft::CLAP_FFT_MEASURE);
 
     for (std::size_t i = 0; i < recovered.size(); ++i) {
         recovered[i] /= static_cast<T>(n);

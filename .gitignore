@@ -1,5 +1,4 @@
 build
-install
 dist
 build-bench-Release
 temp
